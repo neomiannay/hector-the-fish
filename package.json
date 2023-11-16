@@ -1,0 +1,25 @@
+{
+  "repository": "#",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "vite serve --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@theatre/core": "^0.7.0",
+    "@theatre/studio": "^0.7.0",
+    "@tweakpane/plugin-essentials": "^0.2.0",
+    "gsap": "^3.12.2",
+    "stats.js": "^0.17.0",
+    "stylus": "^0.58.1",
+    "three": "^0.141.0",
+    "tweakpane": "^4.0.1",
+    "vite": "^4.5.0",
+    "vite-plugin-glsl": "^0.1.2",
+    "vite-plugin-glslify": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/three": "^0.157.2"
+  }
+}
