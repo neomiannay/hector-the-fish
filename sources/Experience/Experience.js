@@ -73,9 +73,10 @@ export default class Experience
     {
         if(this.config.debug)
         {
-            this.debug = new Pane();
-
-            this.debug.registerPlugin(EssentialsPlugin);
+            // TODO: debug le debug
+            // this.debug = new Pane();
+            //
+            // this.debug.registerPlugin(EssentialsPlugin);
         }
     }
 

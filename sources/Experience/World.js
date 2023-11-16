@@ -21,11 +21,18 @@ export default class World
 
     setScene()
     {   
-        const cube = new THREE.Mesh(
-            new THREE.BoxGeometry(1, 1, 1),
-            new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        )
-        this.scene.add(cube)        
+        this.fish = this.resources.items.fish;
+        this.fish.scene.scale.set(0.2, 0.2, 0.2);
+        this.fish.scene.position.set(0, 0, 0);
+        this.fish.scene.rotation.set(0, Math.PI / 2, 0);
+
+        this.animations = this.fish.animations;
+        this.mixer = new THREE.AnimationMixer(this.fish.scene);
+        this.mixer.clipAction(this.animations[0]).play();
+
+        const light = new THREE.AmbientLight(0xffffff, 1);
+        this.scene.add(light);
+        this.scene.add(this.fish.scene);
     }
 
     resize()
@@ -34,6 +41,10 @@ export default class World
 
     update()
     {
+        if(this.mixer)
+        {
+            this.mixer.update(this.experience.time.delta * 0.001);
+        }
     }
 
     destroy()
