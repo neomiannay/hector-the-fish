@@ -36,13 +36,6 @@ export default class World
     setScene1()
     {
         this.fish = new Character();
-        this.fish = this.resources.items.fish;
-        this.fish.scene.scale.set(0.2, 0.2, 0.2);
-        this.fish.scene.rotation.set(0, Math.PI / 2, 0);
-
-        this.animations = this.fish.animations;
-        this.mixer = new THREE.AnimationMixer(this.fish.scene);
-        this.mixer.clipAction(this.animations[0]).play();
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);

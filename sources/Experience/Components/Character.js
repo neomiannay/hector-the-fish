@@ -30,6 +30,7 @@ export default class Character {
         this.instance.scene.scale.set(0.2, 0.2, 0.2);
         this.instance.scene.position.set(2, 0, 0);
         this.instance.scene.rotation.set(0, Math.PI / 2, 0);
+        this.instance.scene.name = 'character';
 
         this.mixer = new AnimationMixer(this.instance.scene);
         this.mixer.clipAction(this.instance.animations[0]).play();
@@ -53,27 +54,29 @@ export default class Character {
 
         console.log(this.threeCurve);
 
-        this.line = new Line(
-            new BufferGeometry().setFromPoints(this.threeCurve.getPoints(100)),
-            new LineMaterial({
-                color: 0xff0000,
-                linewidth: 1,
-                dashed: false
-            })
-        );
+        // this.line = new Line(
+        //     new BufferGeometry().setFromPoints(this.threeCurve.getPoints(100)),
+        //     new LineMaterial({
+        //         color: 0xff0000,
+        //         linewidth: 1,
+        //         dashed: false
+        //     })
+        // );
 
-        this.experience.scene.add(this.line);
+        // this.experience.scene.add(this.line);
     }
 
     update() {
         this.mixer.update(this.experience.time.delta * 0.001);
+
+        this.u = this.experience.scrollManager.options.progress / 100;
 
         const position = this.threeCurve.getPointAt(this.u);
         const tangent = this.threeCurve.getTangentAt(this.u);
         const angle = Math.atan2(tangent.z, tangent.x);
 
         this.instance.scene.position.copy(position);
-        this.instance.scene.rotation.y = angle;
+        // this.instance.scene.rotation.y = angle;
     }
 
     destroy() {

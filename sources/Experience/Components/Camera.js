@@ -2,10 +2,8 @@ import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-export default class Camera
-{
-    constructor(_options)
-    {
+export default class Camera {
+    constructor(_options) {
         // Options
         this.experience = new Experience()
         this.config = this.experience.config
@@ -16,19 +14,19 @@ export default class Camera
         this.debug = this.experience.debug;
 
         // Set up
-        this.mode = 'default' // defaultCamera \ debugCamera
+        this.mode = 'follow' // defaultCamera \ debugCamera \ followCharacter
 
         this.setInstance()
         this.setModes()
     }
 
-    setInstance()
-    {
+    setInstance() {
         // Set up
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
         // this.modes.debug.instance.position.set(0, .7, 5)
         // this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
-        this.instance.position.set(5, 2, 5)
+        this.instance.position.set(0, 1.2, 5)
+        this.instance.rotation.set(-Math.PI * .06, 0, 0);
         this.instance.rotation.reorder('YXZ')
 
         if (this.debug) {
@@ -39,11 +37,14 @@ export default class Camera
                 open: true
             })
 
-            // this.debugCameraFolder.addInput()
+            this.debugCameraFolder.addBinding(this.instance.position, 'x', {
+                x: {min: -10, max: 10},
+                y: {step: 10},
+                z: {max: 0},
+            })
 
+            this.scene.add(this.instance)
         }
-
-        this.scene.add(this.instance)
     }
 
     setModes()
@@ -70,6 +71,10 @@ export default class Camera
         // this.modes.debug.orbitControls.zoomSpeed = 0.25
         this.modes.debug.orbitControls.enableDamping = true
         this.modes.debug.orbitControls.update()
+
+        this.modes.follow = {}
+        this.modes.follow.instance = this.instance.clone()
+        this.modes.follow.instance.rotation.reorder('YXZ')
     }
 
 
@@ -94,6 +99,16 @@ export default class Camera
         this.instance.position.copy(this.modes[this.mode].instance.position)
         this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
         this.instance.updateMatrixWorld() // To be used in projection
+
+        // Update the followerCamera position
+        if (this.experience.scene.getObjectByName('character')) {
+            this.modes.follow.instance.position.copy(
+                // Make the camera follow the character, behind it
+                this.experience.scene.getObjectByName('character').position.clone().add(
+                    new THREE.Vector3(0, 1, 4)
+                )
+            )
+        }
     }
 
     destroy()

@@ -5,7 +5,7 @@ export default class ScrollManager {
         end: 100,
         progress: 0
     };
-    this.incrementAmount = .05;
+    this.incrementAmount = .1;
     this.animationId = null;
     this.init();
   }
@@ -46,7 +46,7 @@ export default class ScrollManager {
   updateAmount() {
     const range = this.options.end - this.options.begin;
     const mappedValue = (this.options.progress.toFixed(1) / 100) * range + this.options.begin;
-    console.log('Amount:', mappedValue);
+    this.options.amount = mappedValue;
   }
 
   destroy() {
