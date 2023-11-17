@@ -1,18 +1,23 @@
-# Three.js - Template - Complex
-
-🚧 This template is under construction
+# Hector The Fish 🐟
 
 ## Setup
-Download [Node.js](https://nodejs.org/en/download/).
 Run this followed commands:
 
 ``` bash
 # Install dependencies (only the first time)
-npm install
+pnpm install
 
-# Run the local server at localhost:8080
-npm run dev
-
-# Build for production in the dist/ directory
-npm run build
+# Run the local server at localhost:5173
+pnpm dev
 ```
+
+## WebGL folder architecture
+
+- `sources/`: Source code
+  - `Experience/`: Main folder for the experience
+    - `Components`: General components (ex: `Camera.js, Character.js, ...`)
+    - `Scenes`: Scenes (ex: `MainScene.js, ...`)
+    - `Objects`: Each object of the scene (ex: `Fish-lantern.js, ...`)
+    - `Shaders`: Shaders (ex: `fish-lantern.frag, ...`)
+    - `Utils`: Utils (ex: `EventEmitter.js, ...`)
+    - 
