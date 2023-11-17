@@ -15,7 +15,7 @@ export default class Renderer
         this.sizes = this.experience.sizes
         this.scene = this.experience.scene
         this.camera = this.experience.camera
-        
+
         this.usePostprocess = false
 
         this.setInstance()
@@ -45,7 +45,7 @@ export default class Renderer
         this.instance.outputColorSpace = THREE.SRGBColorSpace
         this.instance.toneMapping = THREE.ACESFilmicToneMapping
         this.instance.toneMappingExposure = 1
-        
+
         this.instance.shadowMap.enabled = true
         this.instance.shadowMap.type = THREE.PCFSoftShadowMap
 
@@ -55,6 +55,12 @@ export default class Renderer
         if(this.stats)
         {
             this.stats.setRenderPanel(this.context)
+        }
+
+        // Debug
+        if(this.debug)
+        {
+
         }
 
     }

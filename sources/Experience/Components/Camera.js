@@ -26,6 +26,9 @@ export default class Camera
     {
         // Set up
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
+        // this.modes.debug.instance.position.set(0, .7, 5)
+        // this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
+        this.instance.position.set(5, 2, 5)
         this.instance.rotation.reorder('YXZ')
 
         if (this.debug) {
@@ -51,22 +54,20 @@ export default class Camera
         this.modes.default = {}
         this.modes.default.instance = this.instance.clone()
         this.modes.default.instance.rotation.reorder('YXZ')
-        this.modes.default.instance.position.set(0, 1.2, 5)
-        this.modes.default.instance.rotation.set(-Math.PI * .06, 0, 0);
 
         // Debug
         this.modes.debug = {}
         this.modes.debug.instance = this.instance.clone()
         this.modes.debug.instance.rotation.reorder('YXZ')
 
-
         // this.modes.debug.instance.lookAt(this.scene.position)
-        
+
         this.modes.debug.orbitControls = new OrbitControls(this.modes.debug.instance, this.targetElement)
         this.modes.debug.orbitControls.enabled = this.modes.debug.active
         this.modes.debug.orbitControls.screenSpacePanning = true
         this.modes.debug.orbitControls.enableKeys = false
-        this.modes.debug.orbitControls.zoomSpeed = 0.25
+        this.modes.debug.orbitControls.enableZoom = false
+        // this.modes.debug.orbitControls.zoomSpeed = 0.25
         this.modes.debug.orbitControls.enableDamping = true
         this.modes.debug.orbitControls.update()
     }
@@ -87,7 +88,7 @@ export default class Camera
     update()
     {
         // Update debug orbit controls
-        // this.modes.debug.orbitControls.update()
+        this.modes.debug.orbitControls.update()
 
         // Apply coordinates
         this.instance.position.copy(this.modes[this.mode].instance.position)
@@ -97,6 +98,6 @@ export default class Camera
 
     destroy()
     {
-        // this.modes.debug.orbitControls.destroy()
+        this.modes.debug.orbitControls.destroy()
     }
 }

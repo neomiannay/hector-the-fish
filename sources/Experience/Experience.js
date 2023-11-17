@@ -5,6 +5,7 @@ import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 import Time from './Utils/Time.js'
 import Sizes from './Utils/Sizes.js'
 import Stats from './Utils/Stats.js'
+import ScrollManager from './Hook/ScrollManager.js';
 
 import Resources from './Components/Resources.js'
 import Renderer from './Components/Renderer.js'
@@ -38,6 +39,7 @@ export default class Experience
         this.time = new Time()
         this.sizes = new Sizes()
         this.setConfig()
+        this.setScrollManager()
         this.setDebug()
         this.setStats()
         this.setMousePos()
@@ -46,7 +48,7 @@ export default class Experience
         this.setRenderer()
         this.setResources()
         this.setWorld()
-        
+
         this.sizes.on('resize', () =>
         {
             this.resize()
@@ -58,7 +60,7 @@ export default class Experience
     setConfig()
     {
         this.config = {}
-    
+
         // Debug
         this.config.debug = window.location.hash === '#debug'
 
@@ -71,13 +73,17 @@ export default class Experience
         this.config.height = boundings.height || window.innerHeight
     }
 
+    setScrollManager()
+    {
+        this.scrollManager = new ScrollManager()
+    }
+
     setDebug()
     {
         if(this.config.debug)
         {
             // TODO: debug le debug
             this.debug = new Pane();
-
             this.debug.registerPlugin(EssentialsPlugin);
         }
     }
@@ -94,7 +100,7 @@ export default class Experience
     {
         this.mousePos = new MousePos();
     }
-    
+
     setScene()
     {
         this.scene = new THREE.Scene()
@@ -126,12 +132,12 @@ export default class Experience
     {
         if(this.stats)
             this.stats.update()
-        
+
         this.camera.update()
 
         if(this.world)
             this.world.update()
-        
+
         if(this.renderer)
             this.renderer.update()
 
@@ -165,6 +171,6 @@ export default class Experience
 
     destroy()
     {
-        
+
     }
 }
