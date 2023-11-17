@@ -12,6 +12,7 @@ import Camera from './Components/Camera.js'
 import World from './Components/World.js'
 
 import assets from './assets.js'
+import MousePos from "./Utils/MousePos";
 
 export default class Experience
 {
@@ -39,6 +40,7 @@ export default class Experience
         this.setConfig()
         this.setDebug()
         this.setStats()
+        this.setMousePos()
         this.setScene()
         this.setCamera()
         this.setRenderer()
@@ -74,9 +76,9 @@ export default class Experience
         if(this.config.debug)
         {
             // TODO: debug le debug
-            // this.debug = new Pane();
-            //
-            // this.debug.registerPlugin(EssentialsPlugin);
+            this.debug = new Pane();
+
+            this.debug.registerPlugin(EssentialsPlugin);
         }
     }
 
@@ -86,6 +88,11 @@ export default class Experience
         {
             this.stats = new Stats(true)
         }
+    }
+
+    setMousePos()
+    {
+        this.mousePos = new MousePos();
     }
     
     setScene()
@@ -127,6 +134,9 @@ export default class Experience
         
         if(this.renderer)
             this.renderer.update()
+
+        if(this.mousePos)
+            this.mousePos.update()
 
         window.requestAnimationFrame(() =>
         {

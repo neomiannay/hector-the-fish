@@ -9,14 +9,14 @@ export default class Camera
         // Options
         this.experience = new Experience()
         this.config = this.experience.config
-        this.debug = this.experience.debug
         this.time = this.experience.time
         this.sizes = this.experience.sizes
         this.targetElement = this.experience.targetElement
         this.scene = this.experience.scene
+        this.debug = this.experience.debug;
 
         // Set up
-        this.mode = 'debug' // defaultCamera \ debugCamera
+        this.mode = 'default' // defaultCamera \ debugCamera
 
         this.setInstance()
         this.setModes()
@@ -27,6 +27,18 @@ export default class Camera
         // Set up
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
         this.instance.rotation.reorder('YXZ')
+
+        if (this.debug) {
+            this.debugCameraFolder = this.debug.addFolder({
+                title: 'camera',
+                target: this.instance,
+                closed: false,
+                open: true
+            })
+
+            // this.debugCameraFolder.addInput()
+
+        }
 
         this.scene.add(this.instance)
     }
@@ -39,23 +51,24 @@ export default class Camera
         this.modes.default = {}
         this.modes.default.instance = this.instance.clone()
         this.modes.default.instance.rotation.reorder('YXZ')
+        this.modes.default.instance.position.set(0, 1.2, 5)
+        this.modes.default.instance.rotation.set(-Math.PI * .06, 0, 0);
 
         // Debug
         this.modes.debug = {}
         this.modes.debug.instance = this.instance.clone()
         this.modes.debug.instance.rotation.reorder('YXZ')
-        this.modes.debug.instance.position.set(0, .7, 5)
-        this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
+
 
         // this.modes.debug.instance.lookAt(this.scene.position)
         
-        /*this.modes.debug.orbitControls = new OrbitControls(this.modes.debug.instance, this.targetElement)
+        this.modes.debug.orbitControls = new OrbitControls(this.modes.debug.instance, this.targetElement)
         this.modes.debug.orbitControls.enabled = this.modes.debug.active
         this.modes.debug.orbitControls.screenSpacePanning = true
         this.modes.debug.orbitControls.enableKeys = false
         this.modes.debug.orbitControls.zoomSpeed = 0.25
         this.modes.debug.orbitControls.enableDamping = true
-        this.modes.debug.orbitControls.update()*/
+        this.modes.debug.orbitControls.update()
     }
 
 
