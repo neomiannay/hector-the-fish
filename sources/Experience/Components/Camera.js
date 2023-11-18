@@ -2,6 +2,9 @@ import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+import vertex from '../Shaders/godray/vertex.glsl'
+import fragment from '../Shaders/godray/fragment.glsl'
+
 export default class Camera
 {
     constructor(_options)
@@ -18,20 +21,40 @@ export default class Camera
         // Set up
         this.mode = 'debug' // defaultCamera \ debugCamera
 
+        this.group = new THREE.Group()
+
         this.setInstance()
+        this.setGodRay()
         this.setModes()
+
+        this.scene.add(this.group)
     }
 
     setInstance()
     {
         // Set up
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
-        // this.modes.debug.instance.position.set(0, .7, 5)
-        // this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
-        this.instance.position.set(5, 2, 5)
-        this.instance.rotation.reorder('YXZ')
+        this.group.add(this.instance)
+    }
 
-        this.scene.add(this.instance)
+    setGodRay()
+    {
+        this.plane = new THREE.PlaneGeometry(4, 2)
+        this.planeMaterial = new THREE.ShaderMaterial({
+            transparent: true,
+            side: THREE.DoubleSide,
+            uniforms: {
+                uResolution: { value: new THREE.Vector2() },
+                uTime: { value: 0 },
+
+            },
+            vertexShader: vertex,
+            fragmentShader: fragment,
+        })
+
+        this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
+        
+        this.group.add(this.godRay)
     }
 
     setModes()
@@ -42,11 +65,15 @@ export default class Camera
         this.modes.default = {}
         this.modes.default.instance = this.instance.clone()
         this.modes.default.instance.rotation.reorder('YXZ')
+        this.modes.default.instance.position.set(0, .7, 5)
+        this.modes.default.instance.rotation.set(-Math.PI * .04, 0, 0);
 
         // Debug
         this.modes.debug = {}
         this.modes.debug.instance = this.instance.clone()
         this.modes.debug.instance.rotation.reorder('YXZ')
+        this.modes.debug.instance.position.set(0, .7, 5)
+        this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
 
         // this.modes.debug.instance.lookAt(this.scene.position)
 
@@ -75,13 +102,30 @@ export default class Camera
 
     update()
     {
-        // Update debug orbit controls
-        this.modes.debug.orbitControls.update()
+        if(this.modes.debug) {
+            this.modes.debug.orbitControls.update()
+    
+            // Apply coordinates
+            this.instance.position.copy(this.modes[this.mode].instance.position)
+            this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
+            this.instance.updateMatrixWorld() // To be used in projection
+        }
+
+        // Apply uiniforms
+        this.planeMaterial.uniforms.uTime.value = performance.now() / 1000;
+        this.planeMaterial.uniforms.uResolution.value.copy(
+            new THREE.Vector2(window.innerWidth, window.innerHeight)
+        );
 
         // Apply coordinates
-        this.instance.position.copy(this.modes[this.mode].instance.position)
-        this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
-        this.instance.updateMatrixWorld() // To be used in projection
+        // this.godRay.position.copy(
+        //     new THREE.Vector3(
+        //         0,
+        //         0,
+        //         - 5
+        //     )
+        // )
+        this.godRay.rotation.copy(this.instance.rotation)
     }
 
     destroy()
