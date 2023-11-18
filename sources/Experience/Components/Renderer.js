@@ -17,11 +17,11 @@ export default class Renderer
         this.camera = this.experience.camera
 
         // Debug
-        if(this.debug)
-        {
-            this.debugFolder = this.debug.addFolder('renderer')
-        }
-        
+        // if(this.debug)
+        // {
+        //     this.debugFolder = this.debug.addFolder('renderer')
+        // }
+
         this.usePostprocess = false
 
         this.setInstance()
@@ -51,7 +51,7 @@ export default class Renderer
         this.instance.outputColorSpace = THREE.SRGBColorSpace
         this.instance.toneMapping = THREE.ACESFilmicToneMapping
         this.instance.toneMappingExposure = 1
-        
+
         this.instance.shadowMap.enabled = true
         this.instance.shadowMap.type = THREE.PCFSoftShadowMap
 
@@ -62,11 +62,11 @@ export default class Renderer
         {
             this.stats.setRenderPanel(this.context)
         }
-        
+
         // Debug
         if(this.debug)
         {
-            
+
         }
     }
 
