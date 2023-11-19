@@ -46,7 +46,7 @@ export default class Camera
             uniforms: {
                 uResolution: { value: new THREE.Vector2() },
                 uTime: { value: 0 },
-
+                uCameraRotation: { value: new THREE.Vector3() },
             },
             vertexShader: vertex,
             fragmentShader: fragment,
@@ -116,6 +116,7 @@ export default class Camera
         this.planeMaterial.uniforms.uResolution.value.copy(
             new THREE.Vector2(window.innerWidth, window.innerHeight)
         );
+        this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.rotation)
 
         // Apply coordinates
         // this.godRay.position.copy(

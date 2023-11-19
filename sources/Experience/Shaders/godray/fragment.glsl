@@ -1,5 +1,6 @@
 uniform vec2 uResolution;
 uniform float uTime;
+uniform vec3 uCameraRotation;
 
 varying vec2 vUv;
 
@@ -33,15 +34,22 @@ void main() {
     float raySeedA2 = 36.2214;
     float raySeedB2 = 21.11349;
     float raySpeed2 = 1.5;
+
+
+    float rotationAngle = uCameraRotation.y;
+    vec2 rotatedDir = vec2(cos(rotationAngle), sin(rotationAngle));
     
-    // Calculate the colour of the sun rays on the current fragment
+    vec2 rotatedRayPos1 = rayPos1 + rotatedDir * 100.0;
+    vec2 rotatedRayPos2 = rayPos2 + rotatedDir * 100.0;
+
+    // Calculate the colour of the sun rays on the current fragment with the modified positions
     vec4 rays1 =
         vec4(godrayColor, 1.0) *
-        rayStrength(rayPos1, rayRefDir1, coord, raySeedA1, raySeedB1, raySpeed1);
+        rayStrength(rotatedRayPos1, rotatedDir, coord, raySeedA1, raySeedB1, raySpeed1);
 
     vec4 rays2 =
         vec4(godrayColor, 1.0) *
-        rayStrength(rayPos2, rayRefDir2, coord, raySeedA2, raySeedB2, raySpeed2);
+        rayStrength(rotatedRayPos2, rotatedDir, coord, raySeedA2, raySeedB2, raySpeed2);
 
     vec4 fragColor = rays1 * .5 + rays2 * .4;
 
