@@ -1,7 +1,7 @@
 import Experience from "../Experience";
 import {AnimationMixer, BufferGeometry, CatmullRomCurve3, Line, Vector3} from "three";
 import lerp from "../Utils/lerp";
-import curve from '../curves/test.json';
+import curve from '../curves/test-emie.json';
 import {LineMaterial} from "three/examples/jsm/lines/LineMaterial";
 
 
@@ -15,7 +15,6 @@ export default class Character {
         this.splinePoints = [];
         this.controlPoints = [];
         this.exportedCurve = curve;
-
 
         this.u = 0;
 
@@ -32,14 +31,20 @@ export default class Character {
         this.instance.scene.rotation.set(0, Math.PI / 2, 0);
         this.instance.scene.name = 'character';
 
+
         this.mixer = new AnimationMixer(this.instance.scene);
         this.mixer.clipAction(this.instance.animations[0]).play();
 
+        this.experience.character = this.instance.scene;
         this.experience.scene.add(this.instance.scene);
     }
 
     setCurve() {
         this.exportedCurve.forEach(point => {
+            // Blender inverted Y and Z axis so we need to swap them
+            point.pz = point.py;
+            point.py = point.y;
+            point.y = point.pz;
             this.splinePoints.push(new Vector3(point.px, point.py, point.pz));
             this.controlPoints.push({
                 left: new Vector3(point.hlx, point.hly, point.hlz),
@@ -52,18 +57,19 @@ export default class Character {
 
         this.threeCurve = new CatmullRomCurve3(this.splinePoints);
 
-        console.log(this.threeCurve);
+        // To make the curve visible, we need to create a line and give it a material
+        const geometry = new BufferGeometry().setFromPoints(this.threeCurve.getPoints(100));
+        const material = new LineMaterial({
+            color: 0xff0000,
+            linewidth: 0.002,
+            dashed: false,
+            alphaToCoverage: true,
+        });
 
-        // this.line = new Line(
-        //     new BufferGeometry().setFromPoints(this.threeCurve.getPoints(100)),
-        //     new LineMaterial({
-        //         color: 0xff0000,
-        //         linewidth: 1,
-        //         dashed: false
-        //     })
-        // );
+        this.line = new Line(geometry, material);
+        this.line.name = 'curve';
+        this.experience.scene.add(this.line);
 
-        // this.experience.scene.add(this.line);
     }
 
     update() {
@@ -72,11 +78,16 @@ export default class Character {
         this.u = this.experience.scrollManager.options.progress / 100;
 
         const position = this.threeCurve.getPointAt(this.u);
-        const tangent = this.threeCurve.getTangentAt(this.u);
-        const angle = Math.atan2(tangent.z, tangent.x);
+        // const tangent = this.threeCurve.getTangentAt(this.u);
 
-        this.instance.scene.position.copy(position);
-        // this.instance.scene.rotation.y = angle;
+        const t = 1.0 - Math.pow(0.001, this.experience.time.elapsed);
+
+        this.instance.scene.position.lerp(position, t);
+
+        // Rotate the character to follow the tangent vertically and horizontally
+        // const lookAhead = this.threeCurve.getPointAt((this.u + 0.05) % 1);
+        // this.instance.scene.lookAt(lookAhead);
+
     }
 
     destroy() {

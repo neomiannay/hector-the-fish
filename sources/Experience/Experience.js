@@ -38,6 +38,7 @@ export default class Experience
 
         this.time = new Time()
         this.sizes = new Sizes()
+        this.character = null;
         this.setConfig()
         this.setScrollManager()
         this.setDebug()

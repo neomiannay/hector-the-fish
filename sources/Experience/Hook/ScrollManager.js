@@ -5,7 +5,7 @@ export default class ScrollManager {
         end: 100,
         progress: 0
     };
-    this.incrementAmount = .1;
+    this.incrementAmount = .05;
     this.animationId = null;
     this.init();
   }
@@ -15,7 +15,6 @@ export default class ScrollManager {
   }
 
   handleWheelEvent(event) {
-    event.preventDefault();
     const delta = Math.sign(event.deltaY);
 
     if (delta !== 0) {

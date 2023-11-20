@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import {MeshBasicMaterial} from "three";
+import ThirdPersonCamera from "./ThirdPersonCamera";
 
 export default class Camera {
     constructor(_options) {
@@ -75,6 +77,8 @@ export default class Camera {
         this.modes.follow = {}
         this.modes.follow.instance = this.instance.clone()
         this.modes.follow.instance.rotation.reorder('YXZ')
+
+        this.thirdPersonCamera = new ThirdPersonCamera();
     }
 
 
@@ -101,13 +105,13 @@ export default class Camera {
         this.instance.updateMatrixWorld() // To be used in projection
 
         // Update the followerCamera position
-        if (this.experience.scene.getObjectByName('character')) {
-            this.modes.follow.instance.position.copy(
-                // Make the camera follow the character, behind it
-                this.experience.scene.getObjectByName('character').position.clone().add(
-                    new THREE.Vector3(0, 1, 4)
-                )
-            )
+        if (this.experience.character) {
+            // this.modes.follow.instance.position.copy(this.experience.character.position)
+            // this.modes.follow.instance.position.y += 1.2
+            // this.modes.follow.instance.position.z += 5
+            // this.modes.follow.instance.lookAt(this.experience.character.position)
+
+            this.thirdPersonCamera.update()
         }
     }
 

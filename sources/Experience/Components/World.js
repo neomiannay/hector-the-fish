@@ -35,7 +35,7 @@ export default class World
 
     setScene1()
     {
-        this.fish = new Character();
+        this.character = new Character();
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);
@@ -61,8 +61,8 @@ export default class World
 
     update()
     {
-        if(this.fish) {
-            this.fish.update();
+        if(this.character) {
+            this.character.update();
         }
 
         if(this.scene.children.length > 0)
