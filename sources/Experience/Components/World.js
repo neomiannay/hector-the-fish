@@ -37,8 +37,8 @@ export default class World
 
     setScene1()
     {
-        this.character = new Character();
         this.boat = new Boat();
+        this.character = new Character();
 
 
         const axisHelper = new AxesHelper(15)
