@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 
+import Intro from '../Scenes/Intro.js'
+
 export default class World
 {
     constructor(_options)
@@ -27,24 +29,14 @@ export default class World
         {
             if(_group.name === 'base')
             {
-                this.setScene1()
+                this.setScene()
             }
         })
     }
 
-    setScene1()
+    setScene()
     {
-        this.fish = this.resources.items.fish;
-        this.fish.scene.scale.set(0.2, 0.2, 0.2);
-        this.fish.scene.rotation.set(0, Math.PI / 2, 0);
-
-        this.animations = this.fish.animations;
-        this.mixer = new THREE.AnimationMixer(this.fish.scene);
-        this.mixer.clipAction(this.animations[0]).play();
-
-        const light = new THREE.AmbientLight(0xffffff, 1);
-        this.scene.add(light);
-        this.scene.add(this.fish.scene);
+        this.introScene = new Intro()
     }
 
     resize()
@@ -53,9 +45,9 @@ export default class World
 
     update()
     {
-        if(this.mixer)
+        if(this.introScene)
         {
-            this.mixer.update(this.experience.time.delta * 0.001);
+            this.introScene.update()
         }
 
         if(this.scene.children.length > 0)

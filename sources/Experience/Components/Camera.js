@@ -31,7 +31,24 @@ export default class Camera
         this.instance.position.set(5, 2, 5)
         this.instance.rotation.reorder('YXZ')
 
-        this.scene.add(this.instance)
+    setGodRay()
+    {
+        this.plane = new THREE.PlaneGeometry(4, 2)
+        this.planeMaterial = new THREE.ShaderMaterial({
+            transparent: true,
+            side: THREE.DoubleSide,
+            uniforms: {
+                uTime: { value: 0 },
+                uResolution: { value: new THREE.Vector2() },
+                uCameraRotation: { value: new THREE.Vector3() },
+            },
+            vertexShader: vertex,
+            fragmentShader: fragment,
+        })
+
+        this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
+        
+        this.group.add(this.godRay)
     }
 
     setModes()
