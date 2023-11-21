@@ -4,8 +4,9 @@ export default [
         data: {},
         items:
         [
-            { name: 'fish', source: '/assets/models/koi-fish.glb', type: 'gltf' },
-            { name: 'boat', source: '/assets/models/boat.glb', type: 'gltf' },
+            { name: 'fish', source: '/assets/models/koi-fish4.glb', type: 'gltf' },
+            { name: 'boat', source: '/assets/models/boat2.glb', type: 'gltf' },
+            { name: 'boatAnim', source: '/assets/models/boat-anim.glb', type: 'gltf' },
         ]
     }
 ]

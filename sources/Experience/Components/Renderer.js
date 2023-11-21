@@ -16,12 +16,6 @@ export default class Renderer
         this.scene = this.experience.scene
         this.camera = this.experience.camera
 
-        // Debug
-        // if(this.debug)
-        // {
-        //     this.debugFolder = this.debug.addFolder('renderer')
-        // }
-
         this.usePostprocess = false
 
         this.setInstance()
@@ -68,6 +62,7 @@ export default class Renderer
         {
 
         }
+
     }
 
     setPostProcess()

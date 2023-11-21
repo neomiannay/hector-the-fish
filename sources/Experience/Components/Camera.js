@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import {MeshBasicMaterial} from "three";
+import ThirdPersonCamera from "./ThirdPersonCamera";
 
 import vertex from '../Shaders/godray/vertex.glsl'
 import fragment from '../Shaders/godray/fragment.glsl'
@@ -27,6 +29,10 @@ export default class Camera
         this.setGodRay()
         this.setModes()
 
+        if (this.debug) {
+            this.setDebug()
+        }
+
         this.scene.add(this.group)
     }
 
@@ -34,6 +40,7 @@ export default class Camera
     {
         // Set up
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
+        this.instance.position.set(0, 1.2, 0)
         this.group.add(this.instance)
     }
 
@@ -53,7 +60,7 @@ export default class Camera
         })
 
         this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
-        
+
         this.group.add(this.godRay)
     }
 
@@ -65,19 +72,15 @@ export default class Camera
         this.modes.default = {}
         this.modes.default.instance = this.instance.clone()
         this.modes.default.instance.rotation.reorder('YXZ')
-        this.modes.default.instance.position.set(0, .7, 5)
-        this.modes.default.instance.rotation.set(-Math.PI * .04, 0, 0);
 
         // Debug
         this.modes.debug = {}
         this.modes.debug.instance = this.instance.clone()
         this.modes.debug.instance.rotation.reorder('YXZ')
-        this.modes.debug.instance.position.set(0, .7, 5)
-        this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
 
-        // this.modes.debug.instance.lookAt(this.scene.position)
-
+        this.modes.debug.instance.lookAt(this.scene.position)
         this.modes.debug.orbitControls = new OrbitControls(this.modes.debug.instance, this.targetElement)
+        this.modes.debug.instance.position.set(0, 10, -45)
         this.modes.debug.orbitControls.enabled = this.modes.debug.active
         this.modes.debug.orbitControls.screenSpacePanning = true
         this.modes.debug.orbitControls.enableKeys = false
@@ -85,6 +88,38 @@ export default class Camera
         // this.modes.debug.orbitControls.zoomSpeed = 0.25
         this.modes.debug.orbitControls.enableDamping = true
         this.modes.debug.orbitControls.update()
+
+        this.modes.follow = {}
+        this.modes.follow.instance = this.instance.clone()
+        this.modes.follow.instance.position.set(0, 0, 0)
+        this.modes.follow.instance.rotation.reorder('YXZ')
+
+        this.thirdPersonCamera = new ThirdPersonCamera();
+    }
+
+    setDebug() {
+
+        this.PARAMS = {
+            mode: this.mode,
+        }
+
+        this.debugFolder = this.debug.addFolder({
+            title: 'Camera',
+            expanded: true,
+        })
+
+        this.debugFolder
+            .addBinding(this.PARAMS, 'mode', {
+                options: {
+                    default: 'default',
+                    debug: 'debug',
+                    follow: 'follow',
+                }
+            })
+            .on('change', () => {
+                this.mode = this.PARAMS.mode
+            })
+
     }
 
 
@@ -98,34 +133,32 @@ export default class Camera
 
         this.modes.debug.instance.aspect = this.config.width / this.config.height
         this.modes.debug.instance.updateProjectionMatrix()
+
+        this.modes.follow.instance.aspect = this.config.width / this.config.height
+        this.modes.follow.instance.updateProjectionMatrix()
     }
 
     update()
     {
-        if(this.modes.debug) {
-            this.modes.debug.orbitControls.update()
-    
-            // Apply coordinates
-            this.instance.position.copy(this.modes[this.mode].instance.position)
-            this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
-            this.instance.updateMatrixWorld() // To be used in projection
+        // Update debug orbit controls
+        this.modes.debug.orbitControls.update()
+
+        // Apply coordinates
+        this.instance.position.copy(this.modes[this.mode].instance.position)
+        this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
+        this.instance.updateMatrixWorld() // To be used in projection
+
+        // Update the followerCamera position
+        if (this.experience.character && this.mode === 'follow') {
+            this.thirdPersonCamera.update()
         }
 
-        // Apply uiniforms
+        // Apply uniforms
         this.planeMaterial.uniforms.uTime.value = performance.now() / 1000;
         this.planeMaterial.uniforms.uResolution.value.copy(
             new THREE.Vector2(window.innerWidth, window.innerHeight)
         );
         this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.rotation)
-
-        // Apply coordinates
-        // this.godRay.position.copy(
-        //     new THREE.Vector3(
-        //         0,
-        //         0,
-        //         - 5
-        //     )
-        // )
         this.godRay.rotation.copy(this.instance.rotation)
     }
 

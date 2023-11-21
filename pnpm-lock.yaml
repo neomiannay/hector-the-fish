@@ -11,6 +11,9 @@ dependencies:
   '@theatre/studio':
     specifier: ^0.7.0
     version: 0.7.0(@theatre/core@0.7.0)
+  '@tweakpane/core':
+    specifier: ^2.0.1
+    version: 2.0.1
   '@tweakpane/plugin-essentials':
     specifier: ^0.2.0
     version: 0.2.0(tweakpane@4.0.1)
@@ -278,6 +281,10 @@ packages:
     dependencies:
       '@theatre/core': 0.7.0
       '@theatre/dataverse': 0.7.0
+    dev: false
+
+  /@tweakpane/core@2.0.1:
+    resolution: {integrity: sha512-iJNrLrLffQR0I8mWgAWcMVO9ZPNdNeXZl66WNT+Op5L9FW7BSF6lwG3izR6Ki9CaI3HzIownwjzYS5xWUaokTA==}
     dev: false
 
   /@tweakpane/plugin-essentials@0.2.0(tweakpane@4.0.1):

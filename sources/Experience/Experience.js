@@ -14,6 +14,7 @@ import Fog from './Components/Fog.js';
 import World from './Components/World.js'
 
 import assets from './assets.js'
+import MousePos from "./Utils/MousePos";
 
 export default class Experience
 {
@@ -38,10 +39,12 @@ export default class Experience
 
         this.time = new Time()
         this.sizes = new Sizes()
+        this.character = null;
         this.setConfig()
         // this.setScrollManager()
         this.setDebug()
         this.setStats()
+        this.setMousePos()
         this.setScene()
         this.setCamera()
         this.setRenderer()
@@ -96,6 +99,11 @@ export default class Experience
         }
     }
 
+    setMousePos()
+    {
+        this.mousePos = new MousePos();
+    }
+
     setScene()
     {
         this.scene = new THREE.Scene()
@@ -140,6 +148,9 @@ export default class Experience
 
         if(this.renderer)
             this.renderer.update()
+
+        if(this.mousePos)
+            this.mousePos.update()
 
         window.requestAnimationFrame(() =>
         {
