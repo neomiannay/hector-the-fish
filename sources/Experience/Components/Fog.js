@@ -90,7 +90,7 @@ export default class Fog {
 
         this.debugFolder
             .addBinding( this.PARAMS, 'density', {
-                min: 0, max: 1, step: 0.001
+                min: 0, max: .5, step: 0.001
             })
             .on('change', () => {
                 this.instance.density = this.PARAMS.density;

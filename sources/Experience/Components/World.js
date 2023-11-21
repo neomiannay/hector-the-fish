@@ -8,7 +8,7 @@ export default class World
     constructor(_options)
     {
         this.experience = new Experience()
-        this.scrollManager = this.experience.scrollManager.options
+        // this.scrollManager = this.experience.scrollManager.options
         this.config = this.experience.config
         this.scene = this.experience.scene
         this.resources = this.experience.resources
@@ -50,16 +50,16 @@ export default class World
             this.introScene.update()
         }
 
-        if(this.scene.children.length > 0)
-        {
-            this.scene.children.forEach(c => {
-                if(c.name == 'sequence')
-                {
-                    console.log(c);
-                    c.position.z = this.scrollManager.progress * 0.1;
-                }
-            })
-        }
+        // if(this.scene.children.length > 0)
+        // {
+        //     this.scene.children.forEach(c => {
+        //         if(c.name == 'sequence')
+        //         {
+        //             console.log(c);
+        //             c.position.z = this.scrollManager.progress * 0.1;
+        //         }
+        //     })
+        // }
     }
 
     destroy()

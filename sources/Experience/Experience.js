@@ -10,6 +10,7 @@ import ScrollManager from './Hook/ScrollManager.js';
 import Resources from './Components/Resources.js'
 import Renderer from './Components/Renderer.js'
 import Camera from './Components/Camera.js'
+import Fog from './Components/Fog.js';
 import World from './Components/World.js'
 
 import assets from './assets.js'
@@ -38,13 +39,14 @@ export default class Experience
         this.time = new Time()
         this.sizes = new Sizes()
         this.setConfig()
-        this.setScrollManager()
+        // this.setScrollManager()
         this.setDebug()
         this.setStats()
         this.setScene()
         this.setCamera()
         this.setRenderer()
         this.setResources()
+        this.setFog()
         this.setWorld()
 
         this.sizes.on('resize', () =>
@@ -81,7 +83,9 @@ export default class Experience
         if(this.config.debug)
         {
             // TODO: debug le debug
-            this.debug = new Pane();
+            this.debug = new Pane({
+                title: '⚙️ Debug',
+            });
             this.debug.registerPlugin(EssentialsPlugin);
         }
     }
@@ -114,6 +118,11 @@ export default class Experience
     setResources()
     {
         this.resources = new Resources(assets)
+    }
+
+    setFog()
+    {
+        this.fog = new Fog()
     }
 
     setWorld()

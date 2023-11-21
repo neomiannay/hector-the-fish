@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 
+import Caustics from '../Objects/Caustics.js'
+
 import vertex from '../Shaders/caustics/vertex.glsl'
 import fragment from '../Shaders/caustics/fragment.glsl'
 
@@ -43,28 +45,27 @@ export default class Intro {
         this.boat.scene.position.set(0, -.2, -2);
 
 
+        this.scene.add(light);
+        this.scene.add(this.fish.scene);
+        this.scene.add(this.boat.scene);
+
+        this.setSand();
+        this.setCaustics();
+    }
+
+    setCaustics()
+    {
         this.causticGeo = new THREE.PlaneGeometry(this.terrain.size, this.terrain.size, 100, 100);
-        this.causticMat = new THREE.ShaderMaterial({
+        this.causticMat = new Caustics({
+            side: THREE.BackSide,
             transparent: true,
-            side: THREE.DoubleSide,
-            uniforms: {
-                uTime: { value: 0 },
-                uResolution: { value: new THREE.Vector2() },
-            },
-            vertexShader: vertex,
-            fragmentShader: fragment
+            opacity: 0.4,
         });
         this.caustic = new THREE.Mesh(this.causticGeo, this.causticMat);
         this.caustic.rotation.set(Math.PI / 2, 0, 0);
         this.caustic.position.set(this.terrain.x, this.terrain.y + 0.01, this.terrain.z);
 
-
-        this.scene.add(light);
-        this.scene.add(this.fish.scene);
-        this.scene.add(this.boat.scene);
         this.scene.add(this.caustic);
-
-        this.setSand();
     }
 
     setSand()
@@ -72,8 +73,9 @@ export default class Intro {
         this.sand = new THREE.PlaneGeometry(this.terrain.size, this.terrain.size, 100, 100);
         this.sandMat = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
-            normalMap: this.resources.items.sandNormal,
+            // sandNorma, sandDiffuse, sandAO
             map: this.resources.items.sandDiffuse,
+            normalMap: this.resources.items.sandNormal,
             aoMap: this.resources.items.sandAmbientOcclusion,
         });
 
@@ -93,10 +95,11 @@ export default class Intro {
 
         if(this.causticMat)
         {
-            this.causticMat.uniforms.uTime.value = performance.now() * 0.001;
-            this.causticMat.uniforms.uResolution.value.copy(
-                new THREE.Vector2(window.innerWidth, window.innerHeight)
-            );
+            this.causticMat.update(
+                performance.now() * 0.001,
+                this.config.width,
+                this.config.height,
+            )
         }
     }
 
