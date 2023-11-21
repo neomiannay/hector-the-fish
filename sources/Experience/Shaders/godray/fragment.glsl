@@ -20,16 +20,15 @@ const vec3 godrayColor = vec3(1.0, 191.0 / 255.0, 255.0 / 255.0);
 
 void main() {
     vec2 uv = gl_FragCoord.xy / uResolution.xy;
-    uv.y = 1.0 - uv.y;
     vec2 coord = vec2(gl_FragCoord.x, uResolution.y - gl_FragCoord.y);
-    
-    vec2 rayPos1 = vec2(uResolution.x * 0.8, uResolution.y * -1.4);
+
+    vec2 rayPos1 = vec2(uResolution.x * 0.8, uResolution.y * -5.);
     vec2 rayRefDir1 = normalize(vec2(1.0, 0.241));
     const float raySeedA1 = 22.39910;
     const float raySeedB1 = 18.0234;
     const float raySpeed1 = 1.1;
 
-    vec2 rayPos2 = vec2(uResolution.x * 0.8, uResolution.y * -1.4);
+    vec2 rayPos2 = vec2(uResolution.x * 0.8, uResolution.y * -5.);
     vec2 rayRefDir2 = normalize(vec2(1.6, -0.116));
     float raySeedA2 = 36.2214;
     float raySeedB2 = 21.11349;

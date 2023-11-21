@@ -4,6 +4,8 @@ import Character from "./Character";
 import Boat from "../Objects/Boat";
 import {AxesHelper} from "three";
 
+import Intro from '../Scenes/Intro.js'
+
 export default class World
 {
     constructor(_options)
@@ -37,6 +39,7 @@ export default class World
 
     setScene1()
     {
+        this.introScene = new Intro()
         this.boat = new Boat();
         this.character = new Character();
 
@@ -54,6 +57,10 @@ export default class World
 
     update()
     {
+        if(this.introScene) {
+            this.introScene.update()
+        }
+
         if(this.character) {
             this.character.update();
         }

@@ -41,7 +41,7 @@ export default class Experience
         this.sizes = new Sizes()
         this.character = null;
         this.setConfig()
-        this.setScrollManager()
+        // this.setScrollManager()
         this.setDebug()
         this.setStats()
         this.setMousePos()
@@ -86,7 +86,9 @@ export default class Experience
         if(this.config.debug)
         {
             // TODO: debug le debug
-            this.debug = new Pane();
+            this.debug = new Pane({
+                title: '⚙️ Debug',
+            });
             this.debug.registerPlugin(EssentialsPlugin);
         }
     }

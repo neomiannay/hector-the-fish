@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { BlendFunction, DepthOfFieldEffect, DepthEffect, VignetteEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
 export default class Renderer
 {
@@ -16,10 +15,17 @@ export default class Renderer
         this.scene = this.experience.scene
         this.camera = this.experience.camera
 
-        this.usePostprocess = false
+        this.usePostprocess = true
 
         this.setInstance()
         this.setPostProcess()
+
+        // Debug
+        if(this.debug)
+        {
+            this.setDebug()
+        }
+
     }
 
     setInstance()
@@ -29,7 +35,8 @@ export default class Renderer
         // Renderer
         this.instance = new THREE.WebGLRenderer({
             // alpha: false,
-            antialias: true
+            antialias: true,
+            depth: false
         })
         this.instance.domElement.style.position = 'absolute'
         this.instance.domElement.style.top = 0
@@ -56,13 +63,6 @@ export default class Renderer
         {
             this.stats.setRenderPanel(this.context)
         }
-
-        // Debug
-        if(this.debug)
-        {
-
-        }
-
     }
 
     setPostProcess()
@@ -77,23 +77,111 @@ export default class Renderer
         /**
          * Effect composer
          */
-        this.renderTarget = new THREE.WebGLRenderTarget(
-            this.config.width,
-            this.config.height,
-            {
-                generateMipmaps: false,
-                minFilter: THREE.LinearFilter,
-                magFilter: THREE.LinearFilter,
-                format: THREE.RGBFormat,
-                encoding: THREE.sRGBEncoding,
-                samples: 2
-            }
-        )
-        this.postProcess.composer = new EffectComposer(this.instance, this.renderTarget)
+        this.postProcess.composer = new EffectComposer(this.instance)
         this.postProcess.composer.setSize(this.config.width, this.config.height)
-        this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
+        // this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
+
+        this.depthOfFieldEffect = new DepthOfFieldEffect(this.camera.instance, {
+			focusDistance: 0.0,
+			bokehScale: 2.0,
+			height: 480
+		});
+
+        this.depthEffect = new DepthEffect({
+            blendFunction: BlendFunction.SKIP
+        });
+
+        this.vignetteEffect = new VignetteEffect({
+			eskil: false,
+			offset: 0.35,
+			darkness: 0.5
+		});
+
+        this.effectPass = new EffectPass(
+            this.camera.instance,
+        // this.depthOfFieldEffect,
+        // this.depthEffect,
+        this.vignetteEffect
+        );
+
+        this.cocMaterial = this.depthOfFieldEffect.cocMaterial;
 
         this.postProcess.composer.addPass(this.postProcess.renderPass)
+        this.postProcess.composer.addPass(this.effectPass)
+
+    }
+
+    setDebug()
+    {
+        /**
+         * @param {Debug} PARAMS
+        */
+        this.PARAMS = {
+            depthOfField: {
+                height: 480,
+                bokehScale: 2.0,
+                focusDistance: 0.0,
+            },
+            vignette: {
+                enabled: true,
+                offset: 0.35,
+                darkness: 0.5
+            },
+        }
+
+        // Depth of field
+        this.DOFFolder = this.debug.addFolder({
+            title: 'Depth of field',
+            expanded: true,
+        })
+        this.VignetteFolder = this.debug.addFolder({
+            title: 'Vignette',
+            expanded: true,
+        })
+
+        this.DOFFolder
+            .addBinding(this.PARAMS.depthOfField, 'height', {
+                options: { 240: 240, 360: 360, 480: 480, 720: 720, 1080: 1080 }
+            })
+            .on('change', ({value}) => {
+                this.depthOfFieldEffect.resolution.height = Number(value);
+            })
+        this.DOFFolder
+            .addBinding(this.PARAMS.depthOfField, 'bokehScale', {
+                min: 1, max: 5, step: 0.1
+            })
+            .on('change', ({value}) => {
+                this.depthOfFieldEffect.bokehScale = value;
+            })
+        this.DOFFolder
+            .addBinding(this.PARAMS.depthOfField, 'focusDistance', {
+                min: 0, max: 1, step: 0.001
+            })
+            .on('change', ({value}) => {
+                this.cocMaterial.uniforms.focusDistance.value = value;
+            })
+
+        // Vignette
+        this.VignetteFolder
+            .addBinding(this.PARAMS.vignette, 'enabled')
+            .on('change', ({value}) => {
+                this.vignetteEffect.enabled = value;
+            })
+        this.VignetteFolder
+            .addBinding(this.PARAMS.vignette, 'offset', {
+                min: 0, max: 1, step: 0.001
+            })
+            .on('change', ({value}) => {
+                this.vignetteEffect.uniforms.get('offset').value = value;
+            })
+        this.VignetteFolder
+            .addBinding(this.PARAMS.vignette, 'darkness', {
+                min: 0, max: 1, step: 0.001
+            })
+            .on('change', ({value}) => {
+                this.vignetteEffect.uniforms.get('darkness').value = value;
+            })
+
     }
 
     resize()
@@ -133,7 +221,7 @@ export default class Renderer
     {
         this.instance.renderLists.dispose()
         this.instance.dispose()
-        this.renderTarget.dispose()
+        // this.renderTarget.dispose()
         this.postProcess.composer.renderTarget1.dispose()
         this.postProcess.composer.renderTarget2.dispose()
     }

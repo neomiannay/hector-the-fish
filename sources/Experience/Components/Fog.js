@@ -14,6 +14,8 @@ export default class Fog {
         this.near = 0;
         this.far = 10;
         this.density = 0.1;
+
+        this.modes = 'debug'
         
         this.resources.on('groupEnd', (_group) =>
         {
@@ -21,6 +23,7 @@ export default class Fog {
             {
                 this.setFog()
                 this.setModes()
+
                 if (this.debug) {
                     this.debugFolder()
                 }
@@ -87,7 +90,7 @@ export default class Fog {
 
         this.debugFolder
             .addBinding( this.PARAMS, 'density', {
-                min: 0, max: 1, step: 0.001
+                min: 0, max: .5, step: 0.001
             })
             .on('change', () => {
                 this.instance.density = this.PARAMS.density;

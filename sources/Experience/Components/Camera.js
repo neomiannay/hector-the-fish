@@ -58,6 +58,31 @@ export default class Camera
             vertexShader: vertex,
             fragmentShader: fragment,
         })
+        this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 10)
+        this.instance.position.set(5, 2, 5)
+        this.instance.rotation.reorder('YXZ')
+
+        this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
+
+        this.group.add(this.godRay)
+        // Add to group
+        this.group.add(this.instance)
+    }
+
+    setGodRay()
+    {
+        this.plane = new THREE.PlaneGeometry(4, 2)
+        this.planeMaterial = new THREE.ShaderMaterial({
+            transparent: true,
+            side: THREE.DoubleSide,
+            uniforms: {
+                uTime: { value: 0 },
+                uResolution: { value: new THREE.Vector2() },
+                uCameraRotation: { value: new THREE.Vector3() },
+            },
+            vertexShader: vertex,
+            fragmentShader: fragment,
+        })
 
         this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
 
@@ -77,6 +102,8 @@ export default class Camera
         this.modes.debug = {}
         this.modes.debug.instance = this.instance.clone()
         this.modes.debug.instance.rotation.reorder('YXZ')
+        this.modes.debug.instance.position.set(0, .7, 5)
+        this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
 
         this.modes.debug.instance.lookAt(this.scene.position)
         this.modes.debug.orbitControls = new OrbitControls(this.modes.debug.instance, this.targetElement)
@@ -147,6 +174,14 @@ export default class Camera
         this.instance.position.copy(this.modes[this.mode].instance.position)
         this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
         this.instance.updateMatrixWorld() // To be used in projection
+
+        // Update godray
+        if(this.godRay)
+        {
+            this.planeMaterial.uniforms.uTime.value = this.time.delta * 0.001
+            this.planeMaterial.uniforms.uResolution.value.set(this.config.width, this.config.height)
+            this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.rotation)
+        }
 
         // Update the followerCamera position
         if (this.experience.character && this.mode === 'follow') {
