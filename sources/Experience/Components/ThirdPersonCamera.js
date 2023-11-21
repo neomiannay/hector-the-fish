@@ -2,46 +2,22 @@ import {Vector3} from "three";
 import Experience from "../Experience";
 
 export default class ThirdPersonCamera {
-    constructor(params) {
-        this._params = params;
+    constructor() {
         this._experience = new Experience();
-        this._currentPosition = new Vector3();
-        this._currentLookAt = new Vector3();
+        console.log(this._experience)
     }
 
-    _calculateIdealOffset() {
-        // Order is ZYX for camera
-        const idealOffset = new Vector3(-7, 2, 0);
+    _calculateOffsetPosition() {
+        const offset = new Vector3(-15, 0, 0);
+        const offsetPosition = this._experience.character_placeholder.position.clone().add(offset);
 
-        idealOffset.applyQuaternion(this._experience.character.quaternion);
-        idealOffset.add(this._experience.character.position);
-        return idealOffset;
-    }
-
-    _calculateIdealLookat() {
-        // Order is ZYX for camera
-        const idealLookat = new Vector3(0, 1, 0);
-        // console.log('idealLookat', idealLookat)
-        idealLookat.applyQuaternion(this._experience.character.quaternion);
-        idealLookat.add(this._experience.character.position);
-        // console.log('idealLookat', idealLookat)
-        return idealLookat;
+        return offsetPosition;
     }
 
     update() {
-        const idealOffset = this._calculateIdealOffset();
-        const idealLookAt = this._calculateIdealLookat();
+        const offsetPosition = this._calculateOffsetPosition();
 
-        const t = 0.05 * this._experience.time.delta;
-
-
-        this._currentPosition.lerp(idealOffset, 0.5);
-        this._currentLookAt.lerp(idealLookAt, 0.5);
-
-        this._experience.camera.instance.position.copy(this._currentPosition);
-        this._experience.camera.instance.lookAt(this._currentLookAt);
-
-        // console.log('camera',this._experience.camera.instance.position)
-        // console.log('character',this._experience.character.position)
+        this._experience.camera.instance.position.copy(offsetPosition);
+        this._experience.camera.instance.lookAt(this._experience.character.position);
     }
 }

@@ -20,6 +20,10 @@ export default class Camera {
 
         this.setInstance()
         this.setModes()
+
+        if (this.debug) {
+            this.setDebug()
+        }
     }
 
     setInstance() {
@@ -27,26 +31,10 @@ export default class Camera {
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
         // this.modes.debug.instance.position.set(0, .7, 5)
         // this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
-        this.instance.position.set(0, 1.2, 5)
-        this.instance.rotation.set(-Math.PI * .06, 0, 0);
-        this.instance.rotation.reorder('YXZ')
+        this.instance.position.set(0, 1.2, 0)
+        // this.instance.rotation.set(-Math.PI * .06, 0, 0);
+        // this.instance.rotation.reorder('YXZ')
 
-        if (this.debug) {
-            this.debugCameraFolder = this.debug.addFolder({
-                title: 'camera',
-                target: this.instance,
-                closed: false,
-                open: true
-            })
-
-            this.debugCameraFolder.addBinding(this.instance.position, 'x', {
-                x: {min: -10, max: 10},
-                y: {step: 10},
-                z: {max: 0},
-            })
-
-            this.scene.add(this.instance)
-        }
     }
 
     setModes()
@@ -63,9 +51,9 @@ export default class Camera {
         this.modes.debug.instance = this.instance.clone()
         this.modes.debug.instance.rotation.reorder('YXZ')
 
-        // this.modes.debug.instance.lookAt(this.scene.position)
-
+        this.modes.debug.instance.lookAt(this.scene.position)
         this.modes.debug.orbitControls = new OrbitControls(this.modes.debug.instance, this.targetElement)
+        this.modes.debug.instance.position.set(0, 10, -45)
         this.modes.debug.orbitControls.enabled = this.modes.debug.active
         this.modes.debug.orbitControls.screenSpacePanning = true
         this.modes.debug.orbitControls.enableKeys = false
@@ -76,9 +64,35 @@ export default class Camera {
 
         this.modes.follow = {}
         this.modes.follow.instance = this.instance.clone()
+        this.modes.follow.instance.position.set(0, 0, 0)
         this.modes.follow.instance.rotation.reorder('YXZ')
 
         this.thirdPersonCamera = new ThirdPersonCamera();
+    }
+
+    setDebug() {
+
+        this.PARAMS = {
+            mode: this.mode,
+        }
+
+        this.debugFolder = this.debug.addFolder({
+            title: 'Camera',
+            expanded: true,
+        })
+
+        this.debugFolder
+            .addBinding(this.PARAMS, 'mode', {
+                options: {
+                    default: 'default',
+                    debug: 'debug',
+                    follow: 'follow',
+                }
+            })
+            .on('change', () => {
+                this.mode = this.PARAMS.mode
+            })
+
     }
 
 
@@ -92,6 +106,9 @@ export default class Camera {
 
         this.modes.debug.instance.aspect = this.config.width / this.config.height
         this.modes.debug.instance.updateProjectionMatrix()
+
+        this.modes.follow.instance.aspect = this.config.width / this.config.height
+        this.modes.follow.instance.updateProjectionMatrix()
     }
 
     update()
@@ -105,12 +122,7 @@ export default class Camera {
         this.instance.updateMatrixWorld() // To be used in projection
 
         // Update the followerCamera position
-        if (this.experience.character) {
-            // this.modes.follow.instance.position.copy(this.experience.character.position)
-            // this.modes.follow.instance.position.y += 1.2
-            // this.modes.follow.instance.position.z += 5
-            // this.modes.follow.instance.lookAt(this.experience.character.position)
-
+        if (this.experience.character && this.mode === 'follow') {
             this.thirdPersonCamera.update()
         }
     }
