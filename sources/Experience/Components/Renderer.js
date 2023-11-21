@@ -221,7 +221,7 @@ export default class Renderer
     {
         this.instance.renderLists.dispose()
         this.instance.dispose()
-        // this.renderTarget.dispose()
+        this.renderTarget.dispose()
         this.postProcess.composer.renderTarget1.dispose()
         this.postProcess.composer.renderTarget2.dispose()
     }

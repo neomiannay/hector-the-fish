@@ -72,22 +72,6 @@ export default class Fog {
                 this.renderer.instance.setClearColor(this.PARAMS.fogColor, 1)
             })
 
-        // this.debugFolder
-        //     .addBinding( this.PARAMS, 'near', {
-        //         min: 0, max: 10, step: 0.1
-        //     })
-        //     .on('change', () => {
-        //         this.scene.fog.near = this.PARAMS.near;
-        //     })
-
-        // this.debugFolder
-        //     .addBinding( this.PARAMS, 'far', {
-        //         min: 0, max: 10, step: 0.1
-        //     })
-        //     .on('change', () => {
-        //         this.scene.fog.far = this.PARAMS.far;
-        //     })
-
         this.debugFolder
             .addBinding( this.PARAMS, 'density', {
                 min: 0, max: .5, step: 0.001

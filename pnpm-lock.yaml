@@ -20,6 +20,12 @@ dependencies:
   gsap:
     specifier: ^3.12.2
     version: 3.12.2
+  postprocessing:
+    specifier: ^6.33.3
+    version: 6.33.3(three@0.141.0)
+  stats-gl:
+    specifier: ^1.0.7
+    version: 1.0.7
   stats.js:
     specifier: ^0.17.0
     version: 0.17.0
@@ -795,6 +801,15 @@ packages:
       source-map-js: 1.0.2
     dev: false
 
+  /postprocessing@6.33.3(three@0.141.0):
+    resolution: {integrity: sha512-zQAVvcMf7bfeggQNQeVErD/UFd1XHBi2X6+yxwIv9PjhGCLAYKue3UuzVyu95O7ZUvkDwF0TyTzKdxoaVwYi7w==}
+    engines: {node: '>= 0.13.2'}
+    peerDependencies:
+      three: '>= 0.138.0 < 0.159.0'
+    dependencies:
+      three: 0.141.0
+    dev: false
+
   /prelude-ls@1.1.2:
     resolution: {integrity: sha512-ESF23V4SKG6lVSGZgYNpbsiaAkdab6ZgOxe52p7+Kid3W3u3bxR4Vfd/o21dmN7jSt0IwgZ4v5MUd26FEtXE9w==}
     engines: {node: '>= 0.8.0'}
@@ -898,6 +913,10 @@ packages:
     resolution: {integrity: sha512-agtxZ/kWSsCkI5E4QifRwsaPs0P0JmZV6dkLz6ILYfFYQGn+5plctanRN+IC8dJRiFkyXHrwEE3W9Wmx67uDbw==}
     dependencies:
       escodegen: 1.14.3
+    dev: false
+
+  /stats-gl@1.0.7:
+    resolution: {integrity: sha512-vZI82CjefSxLC1bjw36z28v0+QE9rJKymGlXtfWu+ipW70ZEAwa4EbO4LxluAfLfpqiaAS04NzpYBRLDeAwYWQ==}
     dev: false
 
   /stats.js@0.17.0:

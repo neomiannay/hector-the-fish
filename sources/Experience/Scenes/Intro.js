@@ -5,6 +5,9 @@ import Caustics from '../Objects/Caustics.js'
 
 import vertex from '../Shaders/caustics/vertex.glsl'
 import fragment from '../Shaders/caustics/fragment.glsl'
+import Boat from "../Objects/Boat";
+import Character from "../Components/Character";
+import {AxesHelper} from "three";
 
 export default class Intro {
     constructor(_options)
@@ -29,25 +32,15 @@ export default class Intro {
 
     setScene()
     {
+        this.boat = new Boat();
+        this.character = new Character();
+
+
+        const axisHelper = new AxesHelper(15)
+
+
         const light = new THREE.AmbientLight(0xffffff, 1);
-
-        this.fish = this.resources.items.fish;
-        this.fish.scene.scale.set(0.2, 0.2, 0.2);
-        this.fish.scene.rotation.set(0, Math.PI / 2, 0);
-
-        this.animations = this.fish.animations;
-        this.mixer = new THREE.AnimationMixer(this.fish.scene);
-        this.mixer.clipAction(this.animations[0]).play();
-
-        this.boat = this.resources.items.boat;
-        this.boat.scene.scale.set(0.003, 0.003, 0.003);
-        this.boat.scene.rotation.set(0, Math.PI / 2, 0);
-        this.boat.scene.position.set(0, -.2, -2);
-
-
         this.scene.add(light);
-        this.scene.add(this.fish.scene);
-        this.scene.add(this.boat.scene);
 
         this.setSand();
         this.setCaustics();
@@ -75,7 +68,7 @@ export default class Intro {
             side: THREE.DoubleSide,
             // sandNorma, sandDiffuse, sandAO
             map: this.resources.items.sandDiffuse,
-            normalMap: this.resources.items.sandNormal,
+            // normalMap: this.resources.items.sandNormal,
             aoMap: this.resources.items.sandAmbientOcclusion,
         });
 
@@ -100,6 +93,14 @@ export default class Intro {
                 this.config.width,
                 this.config.height,
             )
+        }
+
+        if(this.character) {
+            this.character.update();
+        }
+
+        if(this.boat) {
+            this.boat.update();
         }
     }
 

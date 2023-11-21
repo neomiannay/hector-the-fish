@@ -61,14 +61,6 @@ export default class World
             this.introScene.update()
         }
 
-        if(this.character) {
-            this.character.update();
-        }
-
-        if(this.boat) {
-            this.boat.update();
-        }
-
         if(this.scene.children.length > 0)
         {
             this.scene.children.forEach(c => {
