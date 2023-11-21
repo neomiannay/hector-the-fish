@@ -21,7 +21,9 @@ export default class Fog {
             {
                 this.setFog()
                 this.setModes()
-                this.debugFolder()
+                if (this.debug) {
+                    this.debugFolder()
+                }
             }
         })
     }
