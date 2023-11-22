@@ -82,9 +82,8 @@ export default class Renderer
         // this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 
         this.depthOfFieldEffect = new DepthOfFieldEffect(this.camera.instance, {
-			focusDistance: 0.0,
 			bokehScale: 2.0,
-			height: 480
+            resolutionScale: 0.25,
 		});
 
         this.depthEffect = new DepthEffect({
@@ -99,7 +98,7 @@ export default class Renderer
 
         this.effectPass = new EffectPass(
             this.camera.instance,
-        // this.depthOfFieldEffect,
+        this.depthOfFieldEffect,
         // this.depthEffect,
         this.vignetteEffect
         );
@@ -120,7 +119,6 @@ export default class Renderer
             depthOfField: {
                 height: 480,
                 bokehScale: 2.0,
-                focusDistance: 0.0,
             },
             vignette: {
                 enabled: true,
@@ -152,13 +150,6 @@ export default class Renderer
             })
             .on('change', ({value}) => {
                 this.depthOfFieldEffect.bokehScale = value;
-            })
-        this.DOFFolder
-            .addBinding(this.PARAMS.depthOfField, 'focusDistance', {
-                min: 0, max: 1, step: 0.001
-            })
-            .on('change', ({value}) => {
-                this.cocMaterial.uniforms.focusDistance.value = value;
             })
 
         // Vignette

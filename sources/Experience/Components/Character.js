@@ -10,6 +10,7 @@ export default class Character {
         this.experience = new Experience();
         this.debug = this.experience.config.debug;
         this.resources = this.experience.resources;
+        this.renderer = this.experience.renderer;
 
         this.u = 0;
 
@@ -29,6 +30,7 @@ export default class Character {
 
         this.experience.character = this.instance.scene;
         this.experience.scene.add(this.instance.scene);
+        this.renderer.depthOfFieldEffect.target = this.instance.scene.position;
     }
 
     update() {
