@@ -15,6 +15,7 @@ export default class Intro {
         this.experience = new Experience()
         // this.scrollManager = this.experience.scrollManager.options
         this.config = this.experience.config
+        this.debug = this.experience.config.debug;
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.camera = this.experience.camera
@@ -35,13 +36,13 @@ export default class Intro {
         this.boat = new Boat();
         this.character = new Character();
 
-        const axisHelper = new AxesHelper(15)
-
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);
 
-        const axesHelper = new AxesHelper(15);
-        this.scene.add(axesHelper);
+        if (this.debug) {
+            const axesHelper = new AxesHelper(15);
+            this.scene.add(axesHelper);
+        }
 
         this.setSand();
         this.setCaustics();
@@ -53,7 +54,7 @@ export default class Intro {
         this.causticMat = new Caustics({
             side: THREE.FrontSide,
             transparent: true,
-            opacity: 0.4,
+            opacity: 0.5
         });
         this.caustic = new THREE.Mesh(this.causticGeo, this.causticMat);
         this.caustic.rotation.set(-Math.PI / 2, 0, 0);

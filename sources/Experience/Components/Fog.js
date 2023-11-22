@@ -10,9 +10,9 @@ export default class Fog {
         this.resources = this.experience.resources
         this.renderer = this.experience.renderer
 
-        this.fogColor = 0x0090E2;
-        this.near = 0;
-        this.far = 10;
+        this.fogColor = 0x072739;
+        this.near = 7.6;
+        this.far = 40.2;
         this.density = 0.1;
 
         this.modes = 'debug'
@@ -42,19 +42,19 @@ export default class Fog {
         // Debug
         this.modes.debug = {}
         this.modes.debug.instance = this.instance.clone()
+
     }
 
 
-    debugFolder()
-    {
+    debugFolder() {
         /**
          * @param {Debug} PARAMS
-        */
+         */
         this.PARAMS = {
             fogColor: this.fogColor,
             near: this.near,
             far: this.far,
-            density: this.density,
+            isActive: true,
         }
 
         // refer to the scene folder
@@ -73,16 +73,35 @@ export default class Fog {
             })
 
         this.debugFolder
-            .addBinding( this.PARAMS, 'density', {
-                min: 0, max: .5, step: 0.001
-            })
+            .addBinding(this.PARAMS, 'near', {min: 0, max: 100, step: 0.1})
             .on('change', () => {
-                this.instance.density = this.PARAMS.density;
+                this.scene.fog.near = this.PARAMS.near;
             })
+
+        this.debugFolder
+            .addBinding(this.PARAMS, 'far', {min: 0, max: 100, step: 0.1})
+            .on('change', () => {
+                this.scene.fog.far = this.PARAMS.far;
+            })
+
+        console.log('this.scene.fog', this.scene.fog)
+
+        this.debugFolder
+            .addBinding(this.PARAMS, 'isActive')
+            .on('change', ({value}) => {
+                if (value) {
+                    this.scene.fog.near = this.near;
+                    this.scene.fog.far = this.far;
+                } else {
+                    this.scene.fog.near = 1.0;
+                    this.scene.fog.far = 0;
+                }
+            });
+
     }
 
     setFog() {
-        this.instance = new THREE.FogExp2( this.fogColor, this.density );
+        this.instance = new THREE.Fog(this.fogColor, this.near, this.far)
         this.scene.fog = this.instance;
 
         // this.scene.fog.color.setHex(this.fogColor);

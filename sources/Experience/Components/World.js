@@ -60,7 +60,6 @@ export default class World
             this.scene.children.forEach(c => {
                 if(c.name == 'sequence')
                 {
-                    console.log(c);
                     c.position.z = this.scrollManager.progress * 0.1;
                 }
             })

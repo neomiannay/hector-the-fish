@@ -1,8 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import {CameraHelper, MeshBasicMaterial} from "three";
-import ThirdPersonCamera from "./ThirdPersonCamera";
+import {CameraHelper} from "three";
 
 import vertex from '../Shaders/godray/vertex.glsl'
 import fragment from '../Shaders/godray/fragment.glsl'
@@ -21,7 +20,7 @@ export default class Camera
         this.scene = this.experience.scene
 
         // Set up
-        this.mode = 'debug' // defaultCamera \ debugCamera
+        this.mode = 'follow' // defaultCamera \ debugCamera
 
         this.group = new THREE.Group()
 
@@ -58,12 +57,13 @@ export default class Camera
             },
             vertexShader: vertex,
             fragmentShader: fragment,
-            depthWrite: false,
-            depthTest: false,
+            // depthWrite: false,
+            // depthTest: false,
         })
         
         this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
         this.godRay.frustumCulled = false
+        this.godRay.renderOrder = 2
 
         this.group.add(this.godRay)
     }
@@ -100,8 +100,10 @@ export default class Camera
         this.modes.follow.instance.position.set(0, 0, 0)
         this.modes.follow.instance.rotation.reorder('YXZ')
 
-        this.cameraHelper = new CameraHelper(this.modes.follow.instance);
-        this.scene.add(this.cameraHelper);
+        if (this.debug) {
+            this.cameraHelper = new CameraHelper(this.modes.follow.instance);
+            this.scene.add(this.cameraHelper);
+        }
     }
 
     setDebug() {
@@ -164,7 +166,9 @@ export default class Camera
         }
 
         // Update camera helper
-        this.cameraHelper.update()
+        if (this.debug) {
+            this.cameraHelper.update()
+        }
     }
 
     destroy()

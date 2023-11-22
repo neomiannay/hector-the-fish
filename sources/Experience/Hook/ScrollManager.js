@@ -19,7 +19,9 @@ export default class ScrollManager {
     this.scrollStopCallback = null;
     this.init();
 
-    this.setDebug();
+    if (this.debug) {
+        this.setDebug();
+    }
   }
 
     setDebug() {
