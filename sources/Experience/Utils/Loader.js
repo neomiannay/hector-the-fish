@@ -17,12 +17,46 @@ export default class Resources extends EventEmitter
         this.experience = new Experience()
         this.renderer = this.experience.renderer.instance
 
-        this.setLoaders()
-
         this.toLoad = 0
         this.loaded = 0
         this.items = {}
+
+        this.loadingScreenElement = null;
+        this.loadingBarElement = null;
+        this.setLoadingScreen();
+
+        this.setLoaders()
     }
+
+    setLoadingScreen() {
+		const loadingScreenStyles = {
+			position: 'fixed',
+			top: 0,
+			left: 0,
+			width: '100%',
+			height: '100%',
+			background: '#000',
+			zIndex: 100,
+		}
+		const loadingBarStyles = {
+			position: 'fixed',
+			top: '50%',
+			left: '25%',
+			width: '50%',
+			margin: 'auto',
+			height: '2px',
+			background: 'white',
+			zIndex: 100,
+			transformOrigin: 'left',
+			transform: 'scaleX(0)',
+		}
+		this.loadingScreenElement = document.createElement('div')
+		Object.assign(this.loadingScreenElement.style, loadingScreenStyles)
+		this.loadingBarElement = document.createElement('div')
+		Object.assign(this.loadingBarElement.style, loadingBarStyles)
+		this.loadingScreenElement.appendChild(this.loadingBarElement)
+		document.body.appendChild(this.loadingScreenElement)
+	}
 
     /**
      * Set loaders
@@ -129,9 +163,11 @@ export default class Resources extends EventEmitter
                 const extension = extensionMatch[1]
                 const loader = this.loaders.find((_loader) => _loader.extensions.find((_extension) => _extension === extension))
 
-                if(loader)
+                if(loader && this.loadingBarElement)
                 {
                     loader.action(_resource)
+                    const progress = this.loaded / this.toLoad;
+                    this.loadingBarElement.style.transform = `scaleX(${progress})`;
                 }
                 else
                 {
@@ -155,9 +191,20 @@ export default class Resources extends EventEmitter
 
         this.trigger('fileEnd', [_resource, _data])
 
-        if(this.loaded === this.toLoad)
-        {
-            this.trigger('end')
+        if (this.loadingBarElement) {
+            const progress = this.loaded / this.toLoad;
+            this.loadingBarElement.style.transform = `scaleX(${progress})`;
+        }
+
+        // Check if all resources are loaded
+        if (this.loaded === this.toLoad) {
+            // All resources are loaded, remove loading screen
+            if (this.loadingScreenElement) {
+                this.loadingScreenElement.remove();
+                this.loadingScreenElement = null;
+                this.loadingBarElement = null;
+            }
+            this.trigger('end'); // Signal that all resources are loaded
         }
     }
 }
