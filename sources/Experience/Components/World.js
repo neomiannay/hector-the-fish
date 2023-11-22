@@ -40,12 +40,6 @@ export default class World
     setScene1()
     {
         this.introScene = new Intro()
-        this.boat = new Boat();
-        this.character = new Character();
-
-
-        const axisHelper = new AxesHelper(15)
-
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);

@@ -1,23 +1,36 @@
-import {Vector3} from "three";
+import {CameraHelper, Vector3} from "three";
 import Experience from "../Experience";
 
 export default class ThirdPersonCamera {
     constructor() {
         this._experience = new Experience();
         console.log(this._experience)
+        this.camera = this._experience.camera;
+        console.log(this.camera)
+        this.debug = this._experience.config.debug;
+        this.newpos = new Vector3(0, 2.2, -5)
+
+        if (this.debug) {
+            this.setDebug()
+        }
     }
 
-    _calculateOffsetPosition() {
-        const offset = new Vector3(-15, 0, 0);
-        const offsetPosition = this._experience.character_placeholder.position.clone().add(offset);
+    setDebug() {
+        this.debugFolder = this._experience.debug.addFolder({
+            title: 'Third Person Camera',
+            expanded: true,
+        });
 
-        return offsetPosition;
     }
+
 
     update() {
-        const offsetPosition = this._calculateOffsetPosition();
+        // this._experience.camera.instance.position.copy(this._experience.character_placeholder.position).add(new Vector3(0, 1.2, -5))
 
-        this._experience.camera.instance.position.copy(offsetPosition);
-        this._experience.camera.instance.lookAt(this._experience.character.position);
+        const localNewPos = new Vector3(0, 2.2, -5)
+        const relativeNewPoissonPos = this._experience.character_placeholder.localToWorld(localNewPos);
+
+        this._experience.camera.instance.position.copy(relativeNewPoissonPos)
+        this._experience.camera.instance.lookAt(this._experience.character_placeholder.position);
     }
 }

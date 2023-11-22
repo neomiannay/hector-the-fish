@@ -11,7 +11,7 @@ export default class Boat {
     init() {
         this.instance = this._experience.resources.items.boatAnim.scene;
         this._mixer = new AnimationMixer(this.instance);
-        this.action = this._mixer.clipAction(this._experience.resources.items.boatAnim.animations[0]);
+        this.action = this._mixer.clipAction(this._experience.resources.items.boatAnim.animations[2]);
         this.action.play();
 
         this._experience.scene.add(this.instance);
@@ -19,7 +19,7 @@ export default class Boat {
         this.animationDuration = this.action.getClip().duration;
 
         this._experience.character_placeholder = this.instance.getObjectByName('HiddenCube');
-        this._experience.character_placeholder.material.visible = true;
+        this._experience.character_placeholder.material.visible = false;
     }
 
     update() {

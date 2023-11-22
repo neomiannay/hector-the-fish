@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import {MeshBasicMaterial} from "three";
+import {CameraHelper, MeshBasicMaterial} from "three";
 import ThirdPersonCamera from "./ThirdPersonCamera";
 
 import vertex from '../Shaders/godray/vertex.glsl'
@@ -21,7 +21,7 @@ export default class Camera
         this.scene = this.experience.scene
 
         // Set up
-        this.mode = 'debug' // defaultCamera \ debugCamera
+        this.mode = 'follow' // defaultCamera \ debugCamera
 
         this.group = new THREE.Group()
 
@@ -29,11 +29,13 @@ export default class Camera
         this.setGodRay()
         this.setModes()
 
+
         if (this.debug) {
             this.setDebug()
         }
 
         this.scene.add(this.group)
+
     }
 
     setInstance()
@@ -41,31 +43,6 @@ export default class Camera
         // Set up
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
         this.instance.position.set(0, 1.2, 0)
-        this.group.add(this.instance)
-    }
-
-    setGodRay()
-    {
-        this.plane = new THREE.PlaneGeometry(4, 2)
-        this.planeMaterial = new THREE.ShaderMaterial({
-            transparent: true,
-            side: THREE.DoubleSide,
-            uniforms: {
-                uResolution: { value: new THREE.Vector2() },
-                uTime: { value: 0 },
-                uCameraRotation: { value: new THREE.Vector3() },
-            },
-            vertexShader: vertex,
-            fragmentShader: fragment,
-        })
-        this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 10)
-        this.instance.position.set(5, 2, 5)
-        this.instance.rotation.reorder('YXZ')
-
-        this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
-
-        this.group.add(this.godRay)
-        // Add to group
         this.group.add(this.instance)
     }
 
@@ -121,7 +98,8 @@ export default class Camera
         this.modes.follow.instance.position.set(0, 0, 0)
         this.modes.follow.instance.rotation.reorder('YXZ')
 
-        this.thirdPersonCamera = new ThirdPersonCamera();
+        this.cameraHelper = new CameraHelper(this.modes.follow.instance);
+        this.scene.add(this.cameraHelper);
     }
 
     setDebug() {
@@ -183,18 +161,8 @@ export default class Camera
             this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.rotation)
         }
 
-        // Update the followerCamera position
-        if (this.experience.character && this.mode === 'follow') {
-            this.thirdPersonCamera.update()
-        }
-
-        // Apply uniforms
-        this.planeMaterial.uniforms.uTime.value = performance.now() / 1000;
-        this.planeMaterial.uniforms.uResolution.value.copy(
-            new THREE.Vector2(window.innerWidth, window.innerHeight)
-        );
-        this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.rotation)
-        this.godRay.rotation.copy(this.instance.rotation)
+        // Update camera helper
+        this.cameraHelper.update()
     }
 
     destroy()

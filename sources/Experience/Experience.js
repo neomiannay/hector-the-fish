@@ -15,6 +15,7 @@ import World from './Components/World.js'
 
 import assets from './assets.js'
 import MousePos from "./Utils/MousePos";
+import ThirdPersonCamera from "./Components/ThirdPersonCamera";
 
 export default class Experience
 {
@@ -114,6 +115,7 @@ export default class Experience
     setCamera()
     {
         this.camera = new Camera()
+        this.thirdPersonCamera = new ThirdPersonCamera();
     }
 
     setRenderer()
@@ -144,6 +146,10 @@ export default class Experience
             this.stats.update()
 
         this.camera.update()
+
+        if (this.character && this.camera.mode === 'follow') {
+            this.thirdPersonCamera.update()
+        }
 
         if(this.world)
             this.world.update()

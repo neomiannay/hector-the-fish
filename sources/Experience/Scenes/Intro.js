@@ -35,12 +35,13 @@ export default class Intro {
         this.boat = new Boat();
         this.character = new Character();
 
-
         const axisHelper = new AxesHelper(15)
-
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);
+
+        const axesHelper = new AxesHelper(15);
+        this.scene.add(axesHelper);
 
         this.setSand();
         this.setCaustics();
@@ -81,10 +82,6 @@ export default class Intro {
 
     update()
     {
-        if(this.mixer)
-        {
-            this.mixer.update(this.experience.time.delta * 0.001);
-        }
 
         if(this.causticMat)
         {

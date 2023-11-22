@@ -11,7 +11,6 @@ export default class Character {
         this.debug = this.experience.config.debug;
         this.resources = this.experience.resources;
 
-
         this.u = 0;
 
         this.setInstance();
@@ -20,8 +19,7 @@ export default class Character {
     setInstance() {
         this.debug && console.log('Character')
 
-        this.instance = this.resources.items.fish;
-
+        this.instance = this.resources.items.finalFishV2;
         this.instance.scene.add(new AxesHelper(15))
         this.instance.scene.scale.set(0.2, 0.2, 0.2);
         this.instance.scene.name = 'character';
@@ -30,7 +28,6 @@ export default class Character {
         this.mixer.clipAction(this.instance.animations[0]).play();
 
         this.experience.character = this.instance.scene;
-        console.log(this.instance.scene)
         this.experience.scene.add(this.instance.scene);
     }
 
