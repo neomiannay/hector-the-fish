@@ -21,7 +21,7 @@ export default class Camera
         this.scene = this.experience.scene
 
         // Set up
-        this.mode = 'follow' // defaultCamera \ debugCamera
+        this.mode = 'debug' // defaultCamera \ debugCamera
 
         this.group = new THREE.Group()
 
@@ -35,7 +35,6 @@ export default class Camera
         }
 
         this.scene.add(this.group)
-
     }
 
     setInstance()
@@ -51,7 +50,7 @@ export default class Camera
         this.plane = new THREE.PlaneGeometry(4, 2)
         this.planeMaterial = new THREE.ShaderMaterial({
             transparent: true,
-            side: THREE.DoubleSide,
+            side: THREE.FrontSide,
             uniforms: {
                 uTime: { value: 0 },
                 uResolution: { value: new THREE.Vector2() },
@@ -59,9 +58,12 @@ export default class Camera
             },
             vertexShader: vertex,
             fragmentShader: fragment,
+            depthWrite: false,
+            depthTest: false,
         })
-
+        
         this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
+        this.godRay.frustumCulled = false
 
         this.group.add(this.godRay)
     }

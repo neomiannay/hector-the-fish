@@ -42,8 +42,8 @@ export default class Experience
         this.sizes = new Sizes()
         this.character = null;
         this.setConfig()
-        this.setScrollManager()
         this.setDebug()
+        this.setScrollManager()
         this.setStats()
         this.setMousePos()
         this.setScene()
