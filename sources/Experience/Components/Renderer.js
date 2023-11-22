@@ -93,8 +93,8 @@ export default class Renderer
 
         this.vignetteEffect = new VignetteEffect({
 			eskil: false,
-			offset: 0.35,
-			darkness: 0.5
+			offset: 0.174,
+			darkness: 0.435
 		});
 
         this.effectPass = new EffectPass(
@@ -124,8 +124,8 @@ export default class Renderer
             },
             vignette: {
                 enabled: true,
-                offset: 0.35,
-                darkness: 0.5
+                offset: 0.174,
+                darkness: 0.435
             },
         }
 
