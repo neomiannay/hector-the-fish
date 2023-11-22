@@ -51,13 +51,14 @@ export default class Intro {
     {
         this.causticGeo = new THREE.PlaneGeometry(this.terrain.size, this.terrain.size, 100, 100);
         this.causticMat = new Caustics({
-            side: THREE.BackSide,
+            side: THREE.FrontSide,
             transparent: true,
             opacity: 0.4,
         });
         this.caustic = new THREE.Mesh(this.causticGeo, this.causticMat);
-        this.caustic.rotation.set(Math.PI / 2, 0, 0);
+        this.caustic.rotation.set(-Math.PI / 2, 0, 0);
         this.caustic.position.set(this.terrain.x, this.terrain.y + 0.01, this.terrain.z);
+        this.caustic.renderOrder = 1;
 
         this.scene.add(this.caustic);
     }
@@ -67,9 +68,7 @@ export default class Intro {
         this.sand = new THREE.PlaneGeometry(this.terrain.size, this.terrain.size, 100, 100);
         this.sandMat = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
-            // sandNorma, sandDiffuse, sandAO
             map: this.resources.items.sandDiffuse,
-            // normalMap: this.resources.items.sandNormal,
             aoMap: this.resources.items.sandAmbientOcclusion,
         });
 

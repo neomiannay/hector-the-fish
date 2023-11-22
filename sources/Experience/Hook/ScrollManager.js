@@ -1,7 +1,11 @@
+import Experience from "../Experience";
 import lerp from "../Utils/lerp";
 
 export default class ScrollManager {
   constructor() {
+    this.experience = new Experience();
+    this.debug = this.experience.debug;
+
     this.options = {
         begin: 0,
         end: 100,
@@ -10,6 +14,26 @@ export default class ScrollManager {
     this.incrementAmount = .05;
     this.animationId = null;
     this.init();
+
+    this.setDebug();
+  }
+
+  setDebug() {
+    this.debugFolder = this.debug.addFolder({
+      title: 'ScrollManager',
+      expanded: true
+    });
+
+    this.debugFolder
+      .addBinding(this.options, 'progress', {
+        min: 0,
+        max: 100,
+        step: 0.1
+      })
+      .on('change', ({value}) => {
+        this.progress = value;
+      });
+
   }
 
   init() {
