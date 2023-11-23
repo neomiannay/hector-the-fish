@@ -98,7 +98,7 @@ export default class Renderer
 
         this.effectPass = new EffectPass(
             this.camera.instance,
-        this.depthOfFieldEffect,
+        // this.depthOfFieldEffect,
         // this.depthEffect,
         this.vignetteEffect
         );

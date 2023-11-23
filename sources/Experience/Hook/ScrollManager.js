@@ -9,7 +9,7 @@ export default class ScrollManager {
     this.options = {
       begin: 0,
       end: 100,
-      progress: 0,
+      progress: 13, // 0
       scrollingDirection: null,
       isScrolling: false,
     };
