@@ -16,14 +16,14 @@ export default class Intro {
     constructor(_options)
     {
         this.experience = new Experience()
-        // this.scrollManager = this.experience.scrollManager.options
+        this.scrollManager = this.experience.scrollManager
         this.config = this.experience.config
         this.debug = this.experience.config.debug;
         this.scene = this.experience.scene
         this.time = this.experience.time
         this.resources = this.experience.resources
         this.camera = this.experience.camera
-        this.fog = this.experience.fog.instance
+        this.fog = this.experience.fog
 
         this.terrain = {
             size: 60,
@@ -59,13 +59,17 @@ export default class Intro {
     setupAnimation() {
         this.startBtn.addEventListener('click', () => {
             const targetFar = 50;
-            const duration = 2.5;
+            const duration = 2;
 
             gsap.to(this.fog, {
                 far: targetFar,
                 duration: duration,
+                ease: 'power2.intOut',
                 onUpdate: () => {
-                    this.scene.fog = new THREE.Fog(this.fog.color, this.for.near, this.fog.far);
+                    this.scene.fog.far = this.fog.far;
+                    this.scrollManager.toggleScrollability(true);
+                },
+                onComplete: () => {
                 }
             });
 

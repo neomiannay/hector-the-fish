@@ -1,4 +1,4 @@
-import {CameraHelper, Vector3} from "three";
+import {CameraHelper, Vector3, Euler} from "three";
 import Experience from "../Experience";
 import lerp from "../Utils/lerp";
 
@@ -10,6 +10,13 @@ export default class ThirdPersonCamera {
         this.debug = this._experience.config.debug;
         this.newpos = new Vector3(0, 4.57, -14.78)
         this.idealLookAt = new Vector3(0, 1.30, 1.74)
+
+        this.mouse = {
+            x: 0,
+            y: 0
+        }
+
+        this.getMousePos();
 
         if (this.debug) {
             this.setDebug()
@@ -64,23 +71,35 @@ export default class ThirdPersonCamera {
             .on('change', ({value}) => {
                 this.idealLookAt.z = value;
             })
+    }
 
+    getMousePos() {
+        window.addEventListener('mousemove', (event) => {
+            this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            this.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+        });
+    }
 
+    updateLookAtPosition(p) {
+        p.x += this.mouse.x * 0.02;
+        p.y -= this.mouse.y * 0.02;
     }
 
 
     update() {
+        // update fish position
         const relativeNewPoissonPos = this._experience.character_placeholder.localToWorld(new Vector3(0, 0, 0).copy(this.newpos));
-
         this._experience.camera.instance.position.copy(relativeNewPoissonPos)
 
+        // update fish lookAt
         const relativeNewPoissonLookAt = this._experience.character_placeholder.localToWorld(new Vector3(0, 0, 0).copy(this.idealLookAt));
-
+        this.updateLookAtPosition(relativeNewPoissonLookAt);
         this._experience.camera.instance.lookAt(
             relativeNewPoissonLookAt
         );
+        this._experience.camera.instance.godRaysRotation = new Euler().setFromQuaternion(this._experience.camera.instance.quaternion);
 
-        // Fov
+        // update camera fov
         if(this._experience.scrollManager.options.isScrolling) {
             if (this._experience.scrollManager.options.scrollingDirection === 'down') {
                 this.camera.instance.fov = lerp(

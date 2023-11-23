@@ -142,6 +142,9 @@ export default class Experience
 
     update()
     {
+        if(this.debug)
+            this.debug.refresh(true);
+
         if(this.stats)
             this.stats.update()
 

@@ -12,6 +12,7 @@ export default class ScrollManager {
       progress: 13, // 0
       scrollingDirection: null,
       isScrolling: false,
+      isScrollable: false,
     };
     this.incrementAmount = .05;
     this.animationId = null;
@@ -43,7 +44,42 @@ export default class ScrollManager {
     }
 
     init() {
-        window.addEventListener('wheel', this.handleWheelEvent.bind(this));
+        window.addEventListener('wheel', (event) =>{
+            if (this.options.isScrollable) {
+                this.handleWheelEvent(event);
+            }
+        });
+    }
+
+    startAutoScroll() {
+        if (this.options.isScrollable) {
+            const direction = this.options.scrollingDirection || 'down';
+            const isIncreasing = direction === 'down';
+    
+            const speedFactor = 1;
+    
+            const scrollLoop = () => {
+                cancelAnimationFrame(this.animationId);
+                this.animate(isIncreasing, speedFactor);
+                this.updateAmount();
+    
+                if ((isIncreasing && this.options.progress < this.options.end) ||
+                    (!isIncreasing && this.options.progress > this.options.begin)) {
+                    this.animationId = requestAnimationFrame(scrollLoop);
+                }
+            };
+    
+            scrollLoop();
+        }
+    }
+
+    toggleScrollability(isScrollable) {
+        if (isScrollable && !this.options.isScrollable) {
+            this.options.isScrollable = true;
+            this.startAutoScroll(); // Start auto-scroll only once
+        } else {
+            this.options.isScrollable = isScrollable;
+        }
     }
 
     handleWheelEvent(event) {
@@ -82,7 +118,7 @@ export default class ScrollManager {
             // Smaller amt value for smoother interpolation
             const amt = this.incrementAmount * 0.01; // Adjust this value as needed
 
-            this.options.progress = lerp(this.options.progress, targetProgress, amt);
+            this.options.progress = lerp(this.options.progress, targetProgress, amt).toFixed(2);
 
             // Check if the animation needs to continue
             if ((isIncreasing && this.options.progress < this.options.end) ||
@@ -94,9 +130,26 @@ export default class ScrollManager {
         step();
     }
 
+    // animate(isIncreasing, speedFactor) {
+    //     const targetProgress = isIncreasing ? this.options.end : this.options.begin;
+    //     const step = () => {
+    //         const delta = isIncreasing ? this.incrementAmount * speedFactor : -this.incrementAmount * speedFactor;
+    
+    //         this.options.progress += delta;
+    
+    //         // Ensure progress stays within the bounds
+    //         if ((isIncreasing && this.options.progress < this.options.end) ||
+    //             (!isIncreasing && this.options.progress > this.options.begin)) {
+    //             this.updateAmount();
+    //             this.animationId = requestAnimationFrame(step);
+    //         }
+    //     };
+    //     step();
+    // }
+
     updateAmount() {
         const range = this.options.end - this.options.begin;
-        const mappedValue = (this.options.progress.toFixed(1) / 100) * range + this.options.begin;
+        const mappedValue = (this.options.progress / 100) * range + this.options.begin;
         this.options.amount = mappedValue;
     }
 

@@ -12,7 +12,7 @@ export default class Fog {
 
         this.fogColor = 0x072739;
         this.near = 7.6;
-        this.far = 19;
+        this.far = 20;
         this.density = 0.1;
 
         this.modes = 'debug'

@@ -42,6 +42,7 @@ export default class Camera
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
         this.instance.position.set(0, 1.2, 0)
         this.group.add(this.instance)
+        this.instance.godRaysRotation = new THREE.Euler().fromArray([0, 0, 0])
     }
 
     setGodRay()
@@ -57,8 +58,6 @@ export default class Camera
             },
             vertexShader: vertex,
             fragmentShader: fragment,
-            // depthWrite: false,
-            // depthTest: false,
         })
         
         this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
@@ -154,6 +153,7 @@ export default class Camera
 
         // Apply coordinates
         this.instance.position.copy(this.modes[this.mode].instance.position)
+        this.instance.rotation.copy(this.modes[this.mode].instance.rotation)
         this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
         this.instance.updateMatrixWorld() // To be used in projection
 
@@ -162,7 +162,7 @@ export default class Camera
         {
             this.planeMaterial.uniforms.uTime.value = this.time.delta * 0.001
             this.planeMaterial.uniforms.uResolution.value.set(this.config.width, this.config.height)
-            this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.rotation)
+            this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.godRaysRotation)
         }
 
         // Update camera helper
