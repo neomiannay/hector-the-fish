@@ -8,6 +8,7 @@ import fragment from '../Shaders/caustics/fragment.glsl'
 import Boat from "../Objects/Boat";
 import Character from "../Components/Character";
 import {AxesHelper} from "three";
+import Sounds from "../Components/Sounds";
 
 export default class Intro {
     constructor(_options)
@@ -44,8 +45,15 @@ export default class Intro {
             this.scene.add(axesHelper);
         }
 
+        this.setSounds();
+
         this.setSand();
         this.setCaustics();
+    }
+
+    setSounds() {
+        console.log('sounds manager', this.experience.character)
+        this.soundsManager = new Sounds();
     }
 
     setCaustics()

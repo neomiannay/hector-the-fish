@@ -20,14 +20,12 @@ export default class Camera
         this.scene = this.experience.scene
 
         // Set up
-        this.mode = 'follow' // defaultCamera \ debugCamera
+        this.mode = 'follow' // followCamera \ debugCamera
 
         this.group = new THREE.Group()
 
         this.setInstance()
         this.setGodRay()
-        this.setModes()
-
 
         if (this.debug) {
             this.setDebug()
@@ -39,9 +37,33 @@ export default class Camera
     setInstance()
     {
         // Set up
+        if (this.mode === 'debug') {
+            this.initDebugCamera();
+        } else {
+            this.initFollowCamera();
+        }
+    }
+
+    initFollowCamera() {
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
         this.instance.position.set(0, 1.2, 0)
         this.group.add(this.instance)
+    }
+
+    initDebugCamera() {
+        this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
+        this.instance.rotation.reorder('YXZ')
+        this.instance.rotation.set(-Math.PI * .04, 0, 0);
+        this.instance.lookAt(this.scene.position)
+        this.instance.orbitControls = new OrbitControls(this.instance, this.targetElement)
+        this.instance.position.set(0, 10, 2)
+        this.instance.orbitControls.enabled = true
+        this.instance.orbitControls.screenSpacePanning = true
+        this.instance.orbitControls.enableKeys = false
+        this.instance.orbitControls.enableZoom = false
+        // this.modes.debug.orbitControls.zoomSpeed = 0.25
+        this.instance.orbitControls.enableDamping = true
+        this.instance.orbitControls.update()
     }
 
     setGodRay()
@@ -68,44 +90,6 @@ export default class Camera
         this.group.add(this.godRay)
     }
 
-    setModes()
-    {
-        this.modes = {}
-
-        // Default
-        this.modes.default = {}
-        this.modes.default.instance = this.instance.clone()
-        this.modes.default.instance.rotation.reorder('YXZ')
-
-        // Debug
-        this.modes.debug = {}
-        this.modes.debug.instance = this.instance.clone()
-        this.modes.debug.instance.rotation.reorder('YXZ')
-        this.modes.debug.instance.position.set(0, .7, 5)
-        this.modes.debug.instance.rotation.set(-Math.PI * .04, 0, 0);
-
-        this.modes.debug.instance.lookAt(this.scene.position)
-        this.modes.debug.orbitControls = new OrbitControls(this.modes.debug.instance, this.targetElement)
-        this.modes.debug.instance.position.set(0, 10, -45)
-        this.modes.debug.orbitControls.enabled = this.modes.debug.active
-        this.modes.debug.orbitControls.screenSpacePanning = true
-        this.modes.debug.orbitControls.enableKeys = false
-        this.modes.debug.orbitControls.enableZoom = false
-        // this.modes.debug.orbitControls.zoomSpeed = 0.25
-        this.modes.debug.orbitControls.enableDamping = true
-        this.modes.debug.orbitControls.update()
-
-        this.modes.follow = {}
-        this.modes.follow.instance = this.instance.clone()
-        this.modes.follow.instance.position.set(0, 0, 0)
-        this.modes.follow.instance.rotation.reorder('YXZ')
-
-        if (this.debug) {
-            this.cameraHelper = new CameraHelper(this.modes.follow.instance);
-            this.scene.add(this.cameraHelper);
-        }
-    }
-
     setDebug() {
 
         this.PARAMS = {
@@ -120,13 +104,16 @@ export default class Camera
         this.debugFolder
             .addBinding(this.PARAMS, 'mode', {
                 options: {
-                    default: 'default',
                     debug: 'debug',
                     follow: 'follow',
                 }
             })
             .on('change', () => {
                 this.mode = this.PARAMS.mode
+
+                if (this.mode === 'debug') {
+                    this.initDebugCamera();
+                }
             })
 
     }
@@ -136,25 +123,19 @@ export default class Camera
     {
         this.instance.aspect = this.config.width / this.config.height
         this.instance.updateProjectionMatrix()
-
-        this.modes.default.instance.aspect = this.config.width / this.config.height
-        this.modes.default.instance.updateProjectionMatrix()
-
-        this.modes.debug.instance.aspect = this.config.width / this.config.height
-        this.modes.debug.instance.updateProjectionMatrix()
-
-        this.modes.follow.instance.aspect = this.config.width / this.config.height
-        this.modes.follow.instance.updateProjectionMatrix()
     }
 
     update()
     {
+
         // Update debug orbit controls
-        this.modes.debug.orbitControls.update()
+        if (this.mode === 'debug') {
+            this.instance.orbitControls.update()
+        }
 
         // Apply coordinates
-        this.instance.position.copy(this.modes[this.mode].instance.position)
-        this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
+        // this.instance.position.copy(this.modes[this.mode].instance.position)
+        // this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
         this.instance.updateMatrixWorld() // To be used in projection
 
         // Update godray
@@ -166,9 +147,9 @@ export default class Camera
         }
 
         // Update camera helper
-        if (this.debug) {
-            this.cameraHelper.update()
-        }
+        // if (this.debug) {
+        //     this.cameraHelper.update()
+        // }
     }
 
     destroy()

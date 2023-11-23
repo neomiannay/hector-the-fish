@@ -48,7 +48,7 @@ export default class Renderer
         this.instance.setSize(this.config.width, this.config.height)
         this.instance.setPixelRatio(this.config.pixelRatio)
 
-        this.instance.physicallyCorrectLights = false
+        // this.instance.physicallyCorrectLights = false
         this.instance.outputColorSpace = THREE.SRGBColorSpace
         this.instance.toneMapping = THREE.ACESFilmicToneMapping
         this.instance.toneMappingExposure = 1
@@ -81,14 +81,6 @@ export default class Renderer
         this.postProcess.composer.setSize(this.config.width, this.config.height)
         // this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 
-        this.depthOfFieldEffect = new DepthOfFieldEffect(this.camera.instance, {
-			bokehScale: 2.0,
-            resolutionScale: 0.25,
-		});
-
-        this.depthEffect = new DepthEffect({
-            blendFunction: BlendFunction.SKIP
-        });
 
         this.vignetteEffect = new VignetteEffect({
 			eskil: false,
@@ -98,12 +90,10 @@ export default class Renderer
 
         this.effectPass = new EffectPass(
             this.camera.instance,
-        this.depthOfFieldEffect,
         // this.depthEffect,
         this.vignetteEffect
         );
 
-        this.cocMaterial = this.depthOfFieldEffect.cocMaterial;
 
         this.postProcess.composer.addPass(this.postProcess.renderPass)
         this.postProcess.composer.addPass(this.effectPass)
@@ -127,30 +117,10 @@ export default class Renderer
             },
         }
 
-        // Depth of field
-        this.DOFFolder = this.debug.addFolder({
-            title: 'Depth of field',
-            expanded: true,
-        })
         this.VignetteFolder = this.debug.addFolder({
             title: 'Vignette',
             expanded: true,
         })
-
-        this.DOFFolder
-            .addBinding(this.PARAMS.depthOfField, 'height', {
-                options: { 240: 240, 360: 360, 480: 480, 720: 720, 1080: 1080 }
-            })
-            .on('change', ({value}) => {
-                this.depthOfFieldEffect.resolution.height = Number(value);
-            })
-        this.DOFFolder
-            .addBinding(this.PARAMS.depthOfField, 'bokehScale', {
-                min: 1, max: 5, step: 0.1
-            })
-            .on('change', ({value}) => {
-                this.depthOfFieldEffect.bokehScale = value;
-            })
 
         // Vignette
         this.VignetteFolder

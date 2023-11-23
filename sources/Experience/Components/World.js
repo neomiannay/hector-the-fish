@@ -43,6 +43,8 @@ export default class World
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);
+
+
     }
 
     resize()

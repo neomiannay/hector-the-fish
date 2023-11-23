@@ -30,7 +30,6 @@ export default class Character {
 
         this.experience.character = this.instance.scene;
         this.experience.scene.add(this.instance.scene);
-        this.renderer.depthOfFieldEffect.target = this.instance.scene.position;
     }
 
     update() {

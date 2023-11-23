@@ -16,7 +16,7 @@
     "stats-gl": "^1.0.7",
     "stats.js": "^0.17.0",
     "stylus": "^0.58.1",
-    "three": "^0.141.0",
+    "three": "^0.158.0",
     "tweakpane": "^4.0.1",
     "vite": "^4.5.0",
     "vite-plugin-glsl": "^0.1.2",

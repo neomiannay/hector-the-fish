@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+import {AudioLoader} from "three";
 
 export default class Resources extends EventEmitter
 {
@@ -146,6 +147,19 @@ export default class Resources extends EventEmitter
                 })
             }
         })
+
+        // Audio
+        const audioLoader = new AudioLoader();
+        this.loaders.push({
+            extensions: ['mp3', 'ogg', 'wav'],
+            action: (_resource) =>
+            {
+                audioLoader.load(_resource.source, (_data) =>
+                {
+                    this.fileLoadEnd(_resource, _data)
+                })
+            }
+        })
     }
 
     /**
@@ -156,7 +170,8 @@ export default class Resources extends EventEmitter
         for(const _resource of _resources)
         {
             this.toLoad++
-            const extensionMatch = _resource.source.match(/\.([a-z]+)$/)
+            // old regex: /\.([a-z]+)$/
+            const extensionMatch = _resource.source.match(/\.([a-z0-9]+)$/i)
 
             if(typeof extensionMatch[1] !== 'undefined')
             {

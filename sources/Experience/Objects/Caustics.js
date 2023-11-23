@@ -1,5 +1,4 @@
 import { MeshBasicMaterial, Vector2, Vector3 } from 'three';
-import {log} from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
 export default class Caustics extends MeshBasicMaterial {
     /** 

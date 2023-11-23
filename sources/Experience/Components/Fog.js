@@ -84,7 +84,6 @@ export default class Fog {
                 this.scene.fog.far = this.PARAMS.far;
             })
 
-        console.log('this.scene.fog', this.scene.fog)
 
         this.debugFolder
             .addBinding(this.PARAMS, 'isActive')

@@ -22,7 +22,7 @@ dependencies:
     version: 3.12.2
   postprocessing:
     specifier: ^6.33.3
-    version: 6.33.3(three@0.141.0)
+    version: 6.33.3(three@0.158.0)
   stats-gl:
     specifier: ^1.0.7
     version: 1.0.7
@@ -33,8 +33,8 @@ dependencies:
     specifier: ^0.58.1
     version: 0.58.1
   three:
-    specifier: ^0.141.0
-    version: 0.141.0
+    specifier: ^0.158.0
+    version: 0.158.0
   tweakpane:
     specifier: ^4.0.1
     version: 4.0.1
@@ -801,13 +801,13 @@ packages:
       source-map-js: 1.0.2
     dev: false
 
-  /postprocessing@6.33.3(three@0.141.0):
+  /postprocessing@6.33.3(three@0.158.0):
     resolution: {integrity: sha512-zQAVvcMf7bfeggQNQeVErD/UFd1XHBi2X6+yxwIv9PjhGCLAYKue3UuzVyu95O7ZUvkDwF0TyTzKdxoaVwYi7w==}
     engines: {node: '>= 0.13.2'}
     peerDependencies:
       three: '>= 0.138.0 < 0.159.0'
     dependencies:
-      three: 0.141.0
+      three: 0.158.0
     dev: false
 
   /prelude-ls@1.1.2:
@@ -955,8 +955,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /three@0.141.0:
-    resolution: {integrity: sha512-JaSDAPWuk4RTzG5BYRQm8YZbERUxTfTDVouWgHMisS2to4E5fotMS9F2zPFNOIJyEFTTQDDKPpsgZVThKU3pXA==}
+  /three@0.158.0:
+    resolution: {integrity: sha512-TALj4EOpdDPF1henk2Q+s17K61uEAAWQ7TJB68nr7FKxqwyDr3msOt5IWdbGm4TaWKjrtWS8DJJWe9JnvsWOhQ==}
     dev: false
 
   /through2@0.6.5:

@@ -1,12 +1,16 @@
 import * as THREE from 'three'
 import EventEmitter from '../Utils/EventEmitter.js'
 import Loader from '../Utils/Loader.js'
+import Experience from "../Experience";
 
 export default class Resources extends EventEmitter
 {
     constructor(_assets)
     {
         super()
+
+        this.experience = new Experience()
+        this.audioListener = this.experience.audioListener;
 
         // Items (will contain every resources)
         this.items = {}
@@ -33,6 +37,13 @@ export default class Resources extends EventEmitter
                     data = new THREE.Texture(_data)
                 }
                 data.needsUpdate = true
+            } else if (_resource.type === 'audio') {
+                if(!(data instanceof THREE.Audio)) {
+                    const sound = new THREE.PositionalAudio(this.audioListener);
+                    sound.setBuffer(_data);
+                    sound.setVolume(1.0)
+                    data = sound;
+                }
             }
 
             this.items[_resource.name] = data

@@ -11,6 +11,11 @@ export default [
             { name: 'sandNormal', source: '/assets/textures/sand-normal.jpg', type: 'texture' },
             { name: 'sandDiffuse', source: '/assets/textures/sand-diffuse.jpg', type: 'texture' },
             { name: 'sandAmbientOcclusion', source: '/assets/textures/sand-ambientOcclusion.jpg', type: 'texture' },
+
+            // Sounds
+            {name: 'mainMusic', source: '/assets/sounds/ambient.mp3', type: 'audio'},
+            // {name: 'ambientSound', source: '/assets/sounds/ambient.mp3', type: 'audio'},
+
         ]
     }
 ]

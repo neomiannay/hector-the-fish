@@ -5,7 +5,7 @@ import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 import Time from './Utils/Time.js'
 import Sizes from './Utils/Sizes.js'
 import Stats from './Utils/Stats.js'
-import ScrollManager from './Hook/ScrollManager.js';
+import ScrollManager from './Hooks/ScrollManager.js';
 
 import Resources from './Components/Resources.js'
 import Renderer from './Components/Renderer.js'
@@ -16,6 +16,7 @@ import World from './Components/World.js'
 import assets from './assets.js'
 import MousePos from "./Utils/MousePos";
 import ThirdPersonCamera from "./Components/ThirdPersonCamera";
+import Sounds from "./Components/Sounds";
 
 export default class Experience
 {
@@ -40,6 +41,7 @@ export default class Experience
 
         this.time = new Time()
         this.sizes = new Sizes()
+        this.isStarted = false;
         this.character = null;
         this.setConfig()
         this.setDebug()
@@ -49,9 +51,17 @@ export default class Experience
         this.setScene()
         this.setCamera()
         this.setRenderer()
-        this.setResources()
-        this.setFog()
-        this.setWorld()
+
+        window.addEventListener('click', () => {
+            if (!this.isStarted) {
+                this.isStarted = true;
+
+                this.setAudio()
+                this.setResources()
+                this.setFog()
+                this.setWorld()
+            }
+        });
 
         this.sizes.on('resize', () =>
         {
@@ -86,7 +96,6 @@ export default class Experience
     {
         if(this.config.debug)
         {
-            // TODO: debug le debug
             this.debug = new Pane({
                 title: '⚙️ Debug',
             });
@@ -118,6 +127,11 @@ export default class Experience
         this.thirdPersonCamera = new ThirdPersonCamera();
     }
 
+    setAudio()
+    {
+        this.audioListener = new THREE.AudioListener();
+    }
+
     setRenderer()
     {
         this.renderer = new Renderer({ rendererInstance: this.rendererInstance })
@@ -139,6 +153,7 @@ export default class Experience
     {
         this.world = new World()
     }
+
 
     update()
     {
