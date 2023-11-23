@@ -10,7 +10,7 @@ export default class Fog {
         this.resources = this.experience.resources
         this.renderer = this.experience.renderer
 
-        this.fogColor = 0x072739;
+        this.fogColor = 0x010e15;
         this.near = 7.6;
         this.far = 20;
         this.density = 0.1;

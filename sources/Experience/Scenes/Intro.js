@@ -43,6 +43,14 @@ export default class Intro {
         // Set the scene elements
         this.boat = new Boat();
         this.character = new Character();
+        this.algue = this.resources.items.algue.scene
+
+        this.algue.position.set(5, 0, -15);
+        this.algue.scale.set(3, 3, 3);
+
+        this.scene.add(this.algue);
+
+
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);
@@ -105,6 +113,11 @@ export default class Intro {
 
     setSand()
     {
+        this.texture = this.resources.items.sandDiffuse;
+        this.texture.wrapS = THREE.RepeatWrapping;
+        this.texture.wrapT = THREE.RepeatWrapping;
+        this.texture.repeat.set(6, 6);
+
         this.sand = new THREE.PlaneGeometry(this.terrain.size, this.terrain.size, 100, 100);
         this.sandMat = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
