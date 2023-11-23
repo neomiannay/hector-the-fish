@@ -50,6 +50,7 @@ body
     transform: translateX(-50%);
     letter-spacing: .2em;
     border: 1px solid white;
+    border-radius: 20px;
     cursor: pointer;
 
     width: min-content;
@@ -93,4 +94,28 @@ body
             }
         }
     }
+}
+
+.video__player {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    object-fit: cover;
+    display: none;
+}
+
+.video__player--active {
+    display: initial;
+}
+
+.set-pointer {
+    cursor: pointer;
+}
+
+.unset-pointer {
+    cursor: default;
 }

@@ -74,7 +74,7 @@ export default class Intro {
                 duration: duration,
                 ease: 'power2.intOut',
                 onUpdate: () => {
-                    this.scene.fog.far = this.fog.far;
+                    // this.scene.fog.far = this.fog.far;
                     this.scrollManager.toggleScrollability(true);
                 },
                 onComplete: () => {
@@ -87,7 +87,8 @@ export default class Intro {
                 duration: .5,
                 ease: 'power2.intOut',
                 onComplete: () => {
-                    this.startBtn.style.display = 'none';
+                    this.startBtn.classList.remove('set-pointer');
+                    this.startBtn.classList.add('unset-pointer');
                 }
             });
             

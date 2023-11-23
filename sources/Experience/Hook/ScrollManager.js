@@ -1,6 +1,8 @@
 import Experience from "../Experience";
 import lerp from "../Utils/lerp";
 
+import { gsap } from 'gsap';
+
 export default class ScrollManager {
   constructor() {
     this.experience = new Experience();
@@ -16,8 +18,13 @@ export default class ScrollManager {
     };
     this.incrementAmount = .05;
     this.animationId = null;
+    this.animationId2 = null;
     this.scrollTimeout = null;
     this.scrollStopCallback = null;
+
+    this.startBtn = document.querySelector('.mask');
+    this.video = document.querySelector('.video__player');
+
     this.init();
 
     if (this.debug) {
@@ -44,35 +51,20 @@ export default class ScrollManager {
     }
 
     init() {
-        window.addEventListener('wheel', this.handleWheelEvent.bind(this));
-    }
+        window.addEventListener('wheel', (event) => {
+            if(this.isScrollable) {
+                this.handleWheelEvent.bind(this)(event);
+            }
+        });
 
-    startAutoScroll() {
-        if (this.isScrollable) {
-            const direction = this.options.scrollingDirection || 'down';
-            const isIncreasing = direction === 'down';
-    
-            const speedFactor = 1.5;
-    
-            const scrollLoop = () => {
-                cancelAnimationFrame(this.animationId);
-                this.animate(isIncreasing, speedFactor);
-                this.updateAmount();
-    
-                if ((isIncreasing && this.options.progress < this.options.end) ||
-                    (!isIncreasing && this.options.progress > this.options.begin)) {
-                    this.animationId = requestAnimationFrame(scrollLoop);
-                }
-            };
-    
-            scrollLoop();
-        }
+        this.startBtn.addEventListener('click', () => {
+            this.videoController();
+        })
     }
 
     toggleScrollability(isScrollable) {
         if (isScrollable && !this.isScrollable) {
             this.isScrollable = true;
-            this.startAutoScroll(); // Start auto-scroll only once
         } else {
             this.isScrollable = isScrollable;
         }
@@ -108,23 +100,48 @@ export default class ScrollManager {
         }
     }
 
-    // animate(isIncreasing, speedFactor) {
-    //     const targetProgress = isIncreasing ? this.options.end : this.options.begin;
-    //     const step = () => {
-    //         // Smaller amt value for smoother interpolation
-    //         const amt = this.incrementAmount * 0.01; // Adjust this value as needed
+    videoController() {
+        let isVideoPlayed = false;
 
-    //         this.options.progress = lerp(this.options.progress, targetProgress, amt);
+        const step = () => {
+            if (this.options.progress >= 85 && !isVideoPlayed) {
 
-    //         // Check if the animation needs to continue
-    //         if ((isIncreasing && this.options.progress < this.options.end) ||
-    //             (!isIncreasing && this.options.progress > this.options.begin)) {
-    //             this.updateAmount();
-    //             this.animationId = requestAnimationFrame(step);
-    //         }
-    //     };
-    //     step();
-    // }
+                this.video.classList.add('video__player--active');
+                this.video.play();
+                isVideoPlayed = true;
+
+                this.toggleScrollability(false);
+    
+                this.video.addEventListener('ended', () => {
+                    this.options.progress = 13;
+                    isVideoPlayed = false;
+                    this.resetExperience()
+                })
+            }
+
+            this.animationId2 = requestAnimationFrame(step);
+        }
+        step();
+        
+    } 
+
+    resetExperience() {
+        this.options.progress = 13;
+        this.video.classList.remove('video__player--active');
+        cancelAnimationFrame(this.animationId);
+        cancelAnimationFrame(this.animationId2);
+
+        gsap.to(this.startBtn, {
+            opacity: 1,
+            y: 0,
+            duration: .5,
+            ease: 'power2.intOut',
+            onUpdate: () => {
+                this.startBtn.classList.remove('unset-pointer');
+                this.startBtn.classList.add('set-pointer');
+            }
+        });
+    }
 
     animate(isIncreasing, speedFactor) {
         const targetProgress = isIncreasing ? this.options.end : this.options.begin;
@@ -140,8 +157,6 @@ export default class ScrollManager {
                 this.updateAmount();
                 this.animationId = requestAnimationFrame(step);
             }
-
-            console.log(this.options.progress)
         };
         step();
     }
@@ -162,7 +177,9 @@ export default class ScrollManager {
 
     destroy() {
         window.removeEventListener('wheel', this.handleWheelEvent.bind(this));
+
         clearTimeout(this.scrollTimeout);
         cancelAnimationFrame(this.animationId);
+        cancelAnimationFrame(this.animationId2);
     }
 }

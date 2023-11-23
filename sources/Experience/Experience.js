@@ -50,7 +50,7 @@ export default class Experience
         this.setCamera()
         this.setRenderer()
         this.setResources()
-        this.setFog()
+        // this.setFog()
         this.setWorld()
 
         this.sizes.on('resize', () =>
