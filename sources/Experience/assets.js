@@ -5,8 +5,8 @@ export default [
         items:
         [
             { name: 'fish', source: '/assets/models/fish.glb', type: 'gltf' },
-            { name: 'boat', source: '/assets/models/boat6.glb', type: 'gltf' },
-            { name: 'boatCurve', source: '/assets/models/boatCurve48.glb', type: 'gltf' },
+            { name: 'boat', source: '/assets/models/boat.glb', type: 'gltf' },
+            { name: 'boatCurve', source: '/assets/models/boatCurve.glb', type: 'gltf' },
             { name: 'sandNormal', source: '/assets/textures/sand-normal.jpg', type: 'texture' },
             { name: 'sandDiffuse', source: '/assets/textures/sand-diffuse.jpg', type: 'texture' },
             { name: 'sandAmbientOcclusion', source: '/assets/textures/sand-ambientOcclusion.jpg', type: 'texture' },
