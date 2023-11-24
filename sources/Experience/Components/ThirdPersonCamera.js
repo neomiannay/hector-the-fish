@@ -8,8 +8,8 @@ export default class ThirdPersonCamera {
         this.camera = this._experience.camera;
         this.fov = new Vector3(this.camera.instance.fov);
         this.debug = this._experience.config.debug;
-        this.newpos = new Vector3(0, 4.57, -14.78)
-        this.idealLookAt = new Vector3(0, 1.30, 1.74)
+        this.newpos = new Vector3(0, 0.32, -1.41)
+        this.idealLookAt = new Vector3(0, -0.22, 3.04)
 
         if (this.debug) {
             this.setDebug()
@@ -64,10 +64,7 @@ export default class ThirdPersonCamera {
             .on('change', ({value}) => {
                 this.idealLookAt.z = value;
             })
-
-
     }
-
 
     update() {
         const relativeNewPoissonPos = this._experience.character_placeholder.localToWorld(new Vector3(0, 0, 0).copy(this.newpos));
@@ -76,9 +73,7 @@ export default class ThirdPersonCamera {
 
         const relativeNewPoissonLookAt = this._experience.character_placeholder.localToWorld(new Vector3(0, 0, 0).copy(this.idealLookAt));
 
-        this._experience.camera.instance.lookAt(
-            relativeNewPoissonLookAt
-        );
+        this._experience.camera.instance.lookAt(relativeNewPoissonLookAt);
 
         // Fov
         if(this._experience.scrollManager.options.isScrolling) {

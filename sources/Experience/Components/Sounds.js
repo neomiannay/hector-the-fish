@@ -1,5 +1,4 @@
 import Experience from "../Experience";
-import {BoxGeometry, BoxHelper, Mesh, MeshBasicMaterial} from "three";
 
 export default class Sounds {
     constructor() {
@@ -19,8 +18,30 @@ export default class Sounds {
         this._experience.character.add(this.ambientSound);
 
         this.ambientSound.setLoop(true);
-        this.ambientSound.setVolume(1);
+        this.ambientSound.setVolume(0.25);
         this.ambientSound.play();
+
+        this.deepAmbientSound = this._experience.resources.items.deepTheme;
+        this.deepAmbientSound.setLoop(true);
+        this.deepAmbientSound.setVolume(1);
+        this.deepAmbientSound.play();
+        this._experience.character.add(this.deepAmbientSound);
+
+        /* Fish talking: 10% progress */
+        this._experience.scrollManager.on(10, () => {
+            this._experience.character.add(this._experience.resources.items.fishTalking);
+            this._experience.resources.items.fishTalking.setVolume(0.6)
+            this._experience.resources.items.fishTalking.play();
+        });
+
+        /* Fear sound: 20% progress */
+        this._experience.scrollManager.on(20, () => {
+            this._experience.character.add(this._experience.resources.items.fearSound);
+            this._experience.resources.items.fearSound.setVolume(0.5)
+            // place the sound to the right of the ear
+            this._experience.resources.items.fearSound.position.set(20, 0, -5);
+            this._experience.resources.items.fearSound.play();
+        });
     }
 
     setDebug() {
@@ -30,7 +51,7 @@ export default class Sounds {
                 volume: this.ambientSound.getVolume(),
             }
 
-            this.debugFolder = this.debug.addFolder({ title: "Sounds: Main Ambiance", expanded: true });
+            this.debugFolder = this.debug.addFolder({title: "Sounds: Main Ambiance", expanded: true});
 
             this.debugFolder
                 .addBinding(this.PARAMS, "isActive")
@@ -44,6 +65,7 @@ export default class Sounds {
                     this.ambientSound.setVolume(value);
                 });
         }
+
 
     }
 

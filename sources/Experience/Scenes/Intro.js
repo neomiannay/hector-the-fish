@@ -14,7 +14,6 @@ export default class Intro {
     constructor(_options)
     {
         this.experience = new Experience()
-        // this.scrollManager = this.experience.scrollManager.options
         this.config = this.experience.config
         this.debug = this.experience.config.debug;
         this.scene = this.experience.scene
@@ -52,7 +51,6 @@ export default class Intro {
     }
 
     setSounds() {
-        console.log('sounds manager', this.experience.character)
         this.soundsManager = new Sounds();
     }
 

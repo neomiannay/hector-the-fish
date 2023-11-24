@@ -20,10 +20,12 @@ export default class Character {
     setInstance() {
         this.debug && console.log('Character')
 
-        this.instance = this.resources.items.finalFishV2;
+        this.instance = this.resources.items.fish;
+
         this.instance.scene.add(new AxesHelper(15))
-        this.instance.scene.scale.set(0.2, 0.2, 0.2);
         this.instance.scene.name = 'character';
+
+        this.instance.scene.scale.set(0.050, 0.05, 0.05);
 
         this.mixer = new AnimationMixer(this.instance.scene);
         this.mixer.clipAction(this.instance.animations[0]).play();

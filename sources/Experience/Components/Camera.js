@@ -25,7 +25,7 @@ export default class Camera
         this.group = new THREE.Group()
 
         this.setInstance()
-        this.setGodRay()
+        // this.setGodRay()
 
         if (this.debug) {
             this.setDebug()
@@ -56,7 +56,7 @@ export default class Camera
         this.instance.rotation.set(-Math.PI * .04, 0, 0);
         this.instance.lookAt(this.scene.position)
         this.instance.orbitControls = new OrbitControls(this.instance, this.targetElement)
-        this.instance.position.set(0, 10, 2)
+        this.instance.position.set(0, 30, 10)
         this.instance.orbitControls.enabled = true
         this.instance.orbitControls.screenSpacePanning = true
         this.instance.orbitControls.enableKeys = false
@@ -137,6 +137,11 @@ export default class Camera
         // this.instance.position.copy(this.modes[this.mode].instance.position)
         // this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
         this.instance.updateMatrixWorld() // To be used in projection
+
+        // Update camera helper
+        if (this.debug && this.cameraHelper) {
+            this.cameraHelper.update()
+        }
 
         // Update godray
         if(this.godRay)

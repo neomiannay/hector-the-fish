@@ -41,6 +41,7 @@ export default class Resources extends EventEmitter
                 if(!(data instanceof THREE.Audio)) {
                     const sound = new THREE.PositionalAudio(this.audioListener);
                     sound.setBuffer(_data);
+                    sound.setRefDistance(100)
                     sound.setVolume(1.0)
                     data = sound;
                 }

@@ -13,7 +13,7 @@ export default class ScrollManager {
       scrollingDirection: null,
       isScrolling: false,
     };
-    this.incrementAmount = .05;
+    this.incrementAmount = .03;
     this.animationId = null;
     this.scrollTimeout = null;
     this.scrollStopCallback = null;
@@ -76,6 +76,27 @@ export default class ScrollManager {
         }
     }
 
+    on(progress, callback) {
+        let isTriggered = false;
+
+        const update = () => {
+            if (isTriggered) {
+                cancelAnimationFrame(update);
+                return;
+            }
+
+            requestAnimationFrame(update);
+
+            const scrollProgress = this.options.progress;
+
+            if (scrollProgress >= progress && !isTriggered) {
+                isTriggered = true;
+                callback(scrollProgress);
+            }
+        }
+        update();
+    }
+
     animate(isIncreasing, speedFactor) {
         const targetProgress = isIncreasing ? this.options.end : this.options.begin;
         const step = () => {
@@ -90,6 +111,7 @@ export default class ScrollManager {
                 this.updateAmount();
                 this.animationId = requestAnimationFrame(step);
             }
+
         };
         step();
     }
