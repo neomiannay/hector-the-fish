@@ -1,3 +1,14 @@
+
+@font-face {
+    font-family: Cunia;
+    src: url("/assets/fonts/Cunia.ttf");
+}
+
+// Variables
+:root {
+    --white-color: #EAEAEA;
+}
+
 :root {
     --tp-base-background-color: hsla(230, 20%, 11%, 1.00);
     --tp-base-shadow-color: hsla(0, 0%, 0%, 0.2);
@@ -42,7 +53,166 @@ body
     height: 100vh;
 }
 
+.main-screen {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    color: var(--white-color);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 72px;
+    justify-content: space-between;
+
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+
+    &.hidden {
+        opacity: 0;
+    }
+
+    .header {
+        margin-top: 150px;
+
+        .logo {
+            transform: translateX(-40px);
+        }
+    }
+
+    .content-container {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .content-container .content {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 70%;
+        height: 100%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 300ms ease-in-out;
+    }
+
+    .content-container .content.active {
+        opacity: 1;
+        pointer-events: initial;
+    }
+
+    .content.landing .cta-container {
+        margin: auto 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        font-family: Quicksand;
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    .credits {
+        position: absolute;
+        bottom: 72px;
+        left: 0;
+        border-radius: 0px 31px 31px 0px;
+        background: #DDFACF;
+        width: fit-content;
+        transform: scaleX(1);
+
+        display: inline-flex;
+        padding: 15px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #239ED8;
+        text-align: center;
+        font-family: Quicksand;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: -1.12px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .cta {
+        position: relative;
+        top: 0;
+        left: 0;
+        display: inline-flex;
+        padding: 15px 30px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        border-radius: 82px;
+        border: 8px solid #FFFEF5;
+        background: #C1FFA4;
+        box-shadow: 0px 4px 6.3px 3px rgba(0, 0, 0, 0.25);
+
+        .cta-text {
+            font-family: Cunia;
+            color: #239ED8;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            z-index: 1;
+        }
+
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #FFFEF5;
+            transform: translateY(-100%);
+            transition: transform 300ms ease-in-out;
+            z-index: 0;
+        }
+
+        &:hover {
+            cursor: pointer;
+            &::before {
+                transform: translateY(0);
+            }
+        }
+    }
+
+    .info {
+        color: #EAEAEA;
+        width: 60%;
+        text-align: center;
+        font-family: Quicksand;
+        font-size: 23px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: -1.61px;
+    }
+}
+
 .mask {
+    display: none;
     z-index: 10;
     position: absolute;
     left: 50%;
@@ -54,7 +224,7 @@ body
     cursor: pointer;
 
     width: min-content;
-    display: flex;
+    //display: flex;
     align-items: center;
     height: 2.4rem;
     text-decoration: none;

@@ -16,8 +16,7 @@ import World from './Components/World.js'
 import assets from './assets.js'
 import MousePos from "./Utils/MousePos";
 import ThirdPersonCamera from "./Components/ThirdPersonCamera";
-import Sounds from "./Components/Sounds";
-import {gsap} from "gsap";
+import UI from "./UI";
 
 export default class Experience
 {
@@ -42,7 +41,9 @@ export default class Experience
 
         this.time = new Time()
         this.sizes = new Sizes()
-        this.startBtn = document.querySelector('.mask');
+        this.isStarted = false;
+        this.ui = new UI();
+        this.startBtn = this.ui.startBtn
         this.character = null;
         this.setConfig()
         this.setDebug()
@@ -124,21 +125,12 @@ export default class Experience
 
     setupAnimation() {
         this.startBtn.addEventListener('click', () => {
-
-            gsap.to(this.startBtn, {
-                opacity: 0,
-                y: -50,
-                duration: .5,
-                ease: 'power2.intOut',
-                onComplete: () => {
-                    this.startBtn.style.display = 'none';
-                }
-            });
-
+            console.log('start')
             this.setAudio()
             this.setResources()
             this.setWorld()
             this.setFog()
+            this.isStarted = true;
         });
     }
 
@@ -192,6 +184,15 @@ export default class Experience
         if(this.mousePos)
             this.mousePos.update()
 
+        if (!this.isStarted && this.camera.grPlaneMaterial) {
+            console.log(this.camera.instance.godRaysRotation)
+            this.camera.grPlaneMaterial.uniforms.uCameraRotation.value.copy(this.camera.instance.godRaysRotation.set(
+                this.camera.instance.godRaysRotation.x + this.time.delta * 0.0002,
+                this.camera.instance.godRaysRotation.y + this.time.delta * 0.0002,
+                this.camera.instance.godRaysRotation.z + this.time.delta * 0.0002,
+            ));
+        }
+
         window.requestAnimationFrame(() =>
         {
             this.update()
@@ -215,6 +216,7 @@ export default class Experience
 
         if(this.world)
             this.world.resize()
+
     }
 
     destroy()

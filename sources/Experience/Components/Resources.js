@@ -18,6 +18,9 @@ export default class Resources extends EventEmitter
         // Loader
         this.loader = new Loader({ renderer: this.renderer })
 
+        console.log('loading: ', _assets)
+        console.log('this loader: ', this.loader)
+
         this.groups = {}
         this.groups.assets = [..._assets]
         this.groups.loaded = []

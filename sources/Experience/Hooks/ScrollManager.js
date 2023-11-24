@@ -22,7 +22,7 @@ export default class ScrollManager {
     this.scrollTimeout = null;
     this.scrollStopCallback = null;
 
-    this.startBtn = document.querySelector('.mask');
+    this.startBtn = this.experience.ui.startBtn;
     this.video = document.querySelector('.video__player');
 
     this.init();

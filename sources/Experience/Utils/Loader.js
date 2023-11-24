@@ -30,33 +30,8 @@ export default class Resources extends EventEmitter
     }
 
     setLoadingScreen() {
-		const loadingScreenStyles = {
-			position: 'fixed',
-			top: 0,
-			left: 0,
-			width: '100%',
-			height: '100%',
-			background: '#000',
-			zIndex: 100,
-		}
-		const loadingBarStyles = {
-			position: 'fixed',
-			top: '50%',
-			left: '25%',
-			width: '50%',
-			margin: 'auto',
-			height: '2px',
-			background: 'white',
-			zIndex: 100,
-			transformOrigin: 'left',
-			transform: 'scaleX(0)',
-		}
-		this.loadingScreenElement = document.createElement('div')
-		Object.assign(this.loadingScreenElement.style, loadingScreenStyles)
-		this.loadingBarElement = document.createElement('div')
-		Object.assign(this.loadingBarElement.style, loadingBarStyles)
-		this.loadingScreenElement.appendChild(this.loadingBarElement)
-		document.body.appendChild(this.loadingScreenElement)
+        this.loadingScreenElement = this.experience.ui.loadingScreenElement;
+        this.loadingBarElement = this.experience.ui.loadingBarElement;
 	}
 
     /**
@@ -215,6 +190,8 @@ export default class Resources extends EventEmitter
         if (this.loaded === this.toLoad) {
             // All resources are loaded, remove loading screen
             if (this.loadingScreenElement) {
+                console.log('removing')
+                this.experience.ui.mainScreen.classList.add('hidden');
                 this.loadingScreenElement.remove();
                 this.loadingScreenElement = null;
                 this.loadingBarElement = null;

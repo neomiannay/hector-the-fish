@@ -75,7 +75,6 @@ export default class Camera
         this.grPlaneMaterial = new THREE.ShaderMaterial({
             transparent: true,
             side: THREE.FrontSide,
-            color: 0xffffff,
             uniforms: {
                 uTime: { value: 0 },
                 uResolution: { value: new THREE.Vector2() },
@@ -164,7 +163,10 @@ export default class Camera
         {
             this.grPlaneMaterial.uniforms.uTime.value = this.time.delta * 0.001
             this.grPlaneMaterial.uniforms.uResolution.value.set(this.config.width, this.config.height)
-            this.grPlaneMaterial.uniforms.uCameraRotation.value.copy(this.instance.godRaysRotation)
+
+            if (this.experience.isStarted) {
+                this.grPlaneMaterial.uniforms.uCameraRotation.value.copy(this.instance.godRaysRotation)
+            }
         }
         if(this.whiteScreen)
         {

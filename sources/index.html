@@ -3,27 +3,42 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <title>Three.js - Template - Complex</title>
         <link rel="stylesheet" href="./style.scss">
     </head>
     <body>
 
-        <div class="mask">
-            <!-- <span>DIVE IN</span> -->
-            <span>
-                <div>
-                    <span>DIVE IN</span>
-                    <span>DIVE IN</span>
-                </div>
-            </span>
+    <div class="main-screen">
+        <div class="header">
+            <img class="logo" src="/assets/logo.svg" alt="Hector le fish logo">
         </div>
+        <div class="content-container">
+            <div class="content landing active">
+                <div class="cta-container">
+                    <button class="cta"><span class="cta-text">EXPLORE</span></button>
+                    <p class="text">Explorez le monde nautique</p>
+                </div>
+                <p class="info">Plongez dans les profondeurs mystérieuses des abysses aux
+                    côtés du courageux Hector, le poisson rouge intrépide ! </p>
+            </div>
+            <div class="content loading-screen-container">
+                <span class="loading-bar"></span>
+                <p class="loading-number-container"><span class="loading-number">0</span>%</p>
+                <p class="loading-text">Nous attendons Hector...</p>
+            </div>
+        </div>
+        <button class="credits">Voir les crédits</button>
+    </div>
         
-        <video class="video__player">
-            <source src="./assets/video/test-short.mp4" type="video/mp4" />
-        </video>
+    <video class="video__player">
+        <source src="./assets/video/test-short.mp4" type="video/mp4" />
+    </video>
 
-        <div class="experience"></div>
+    <div class="experience"></div>
 
-        <script type="module" src="./index.js"></script>
+    <script type="module" src="./index.js"></script>
     </body>
 </html>
