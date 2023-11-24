@@ -7,7 +7,7 @@ varying vec2 vUv;
 void main() {
     vec4 finalColor = vec4(1.0, 1.0, 1.0, 0.0);
 
-    float fadeInStart = 0.80;
+    float fadeInStart = 0.94;
     if (uProgress > fadeInStart) {
 
         // increase the alpa from 0.0 to 1.0 very quickly

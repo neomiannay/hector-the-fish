@@ -123,7 +123,7 @@ export default class ScrollManager {
 
     videoController() {
         const step = () => {
-            if (this.options.progress >= 20) {
+            if (this.options.progress >= 96) {
                 this.video.classList.add('video__player--active');
                 this.video.play();
 
@@ -170,7 +170,8 @@ export default class ScrollManager {
 
     updateAmount() {
         const range = this.options.end - this.options.begin;
-        const mappedValue = (this.options.progress.toFixed(1) / 100) * range + this.options.begin;
+        const mappedValue = (this.options.progress.toFixed(1) / 10000) * range + this.options.begin;
+        console.log('mappedValue', mappedValue)
         this.options.amount = mappedValue;
     }
 
