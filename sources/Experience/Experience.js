@@ -5,7 +5,7 @@ import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 import Time from './Utils/Time.js'
 import Sizes from './Utils/Sizes.js'
 import Stats from './Utils/Stats.js'
-import ScrollManager from './Hooks/ScrollManager.js';
+import ScrollManager from './Hooks/ScrollManager.js'
 
 import Resources from './Components/Resources.js'
 import Renderer from './Components/Renderer.js'
@@ -16,7 +16,8 @@ import World from './Components/World.js'
 import assets from './assets.js'
 import MousePos from "./Utils/MousePos";
 import ThirdPersonCamera from "./Components/ThirdPersonCamera";
-import Sounds from "./Components/Sounds";
+
+import Sounds from './Components/Sounds.js';
 import {gsap} from "gsap";
 
 export default class Experience
@@ -42,8 +43,8 @@ export default class Experience
 
         this.time = new Time()
         this.sizes = new Sizes()
-        this.startBtn = document.querySelector('.mask');
         this.character = null;
+        this.startBtn = document.querySelector('.mask');
         this.setConfig()
         this.setDebug()
         this.setScrollManager()
@@ -52,8 +53,7 @@ export default class Experience
         this.setScene()
         this.setCamera()
         this.setRenderer()
-        this.setupAnimation();
-
+        this.setupAnimation()
         // this.setResources()
         // this.setFog()
         // this.setWorld()
@@ -91,6 +91,7 @@ export default class Experience
     {
         if(this.config.debug)
         {
+            // TODO: debug le debug
             this.debug = new Pane({
                 title: '⚙️ Debug',
             });

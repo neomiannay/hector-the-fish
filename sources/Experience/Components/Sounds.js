@@ -27,6 +27,38 @@ export default class Sounds {
         this.deepAmbientSound.play();
         this._experience.character.add(this.deepAmbientSound);
 
+        this.algueFloor = this._experience.scene.children.find((child) => child.name === 'algueFloor');
+        this.algueDescent = this._experience.scene.children.find((child) => child.name === 'algueDescent');
+
+        console.log(this._experience.scene.children);
+        console.log(this.algueFloor);
+        console.log(this.algueDescent);
+
+        this.algueDescent.children.sort(() => Math.random() - 0.5).slice(0, 3).forEach(algue => {
+            this.linkSoundToMesh({
+                mesh: algue,
+                sound: this._experience.resources.items.plantSound,
+                callback: () => {
+                    this._experience.resources.items.plantSound.setLoop(true);
+                    this._experience.resources.items.plantSound.setVolume(0.4);
+                    this._experience.resources.items.plantSound.play();
+                }
+            });
+        });
+
+        this.algueFloor.children.sort(() => Math.random() - 0.5).slice(0, 6).forEach(algue => {
+            this.linkSoundToMesh({
+                mesh: algue,
+                sound: this._experience.resources.items.plantSound,
+                callback: () => {
+                    this._experience.resources.items.plantSound.setLoop(true);
+                    this._experience.resources.items.plantSound.setVolume(0.4);
+                    this._experience.resources.items.plantSound.play();
+                }
+            });
+        });
+
+
         /* Fish talking: 10% progress */
         this._experience.scrollManager.on(10, () => {
             this._experience.character.add(this._experience.resources.items.fishTalking);
@@ -42,6 +74,44 @@ export default class Sounds {
             this._experience.resources.items.fearSound.position.set(20, 0, -5);
             this._experience.resources.items.fearSound.play();
         });
+
+        /* Fear sound: 48% progress */
+        this._experience.scrollManager.on(48, () => {
+            this._experience.boat.add(this._experience.resources.items.boatGrincement);
+            this._experience.resources.items.boatGrincement.setVolume(0.3)
+            // place the sound to the right of the ear
+            this._experience.resources.items.boatGrincement.play();
+        });
+
+        /* Fear sound: 60% progress */
+        this._experience.scrollManager.on(60, () => {
+            this._experience.resources.items.fishTalking.setVolume(0.3)
+            this.ambientSound.setVolume(0.10);
+            this.deepAmbientSound.setVolume(.5);
+            this._experience.boat.add(this._experience.resources.items.bruitEffrayant);
+            this._experience.resources.items.bruitEffrayant.setVolume(0.3)
+            // place the sound to the right of the ear
+            this._experience.resources.items.bruitEffrayant.position.set(25, 10, 0);
+            this._experience.resources.items.bruitEffrayant.play();
+
+            // after that we set back the volume of the ambient sound
+            setTimeout(() => {
+                this.ambientSound.setVolume(0.25);
+                this.deepAmbientSound.setVolume(1);
+            }, 2000)
+        });
+
+        /* Fish talking: 90% progress */
+        this._experience.scrollManager.on(90, () => {
+            this._experience.character.add(this._experience.resources.items.discoverCoquillage);
+            this._experience.resources.items.fishTalking.setVolume(0.3)
+            this.ambientSound.setVolume(0.10);
+            this.deepAmbientSound.setVolume(.5);
+            this._experience.resources.items.discoverCoquillage.setVolume(0.6)
+            this._experience.resources.items.discoverCoquillage.setLoop(true);
+            this._experience.resources.items.discoverCoquillage.position.set(0, 0, 5);
+            this._experience.resources.items.discoverCoquillage.play();
+        })
     }
 
     setDebug() {

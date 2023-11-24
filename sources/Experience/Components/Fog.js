@@ -48,7 +48,7 @@ export default class Fog {
     }
 
     setAnimation() {
-        const targetFar = 50;
+        const targetFar = 10;
         const duration = 2;
 
         gsap.to(this.instance, {
