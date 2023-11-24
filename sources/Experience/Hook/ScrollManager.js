@@ -125,6 +125,7 @@ export default class ScrollManager {
         this.options.progress = 13;
         this.video.classList.remove('video__player--active');
         cancelAnimationFrame(this.animationId2);
+        this.videoController();
     }
 
     animate(isIncreasing, speedFactor) {
