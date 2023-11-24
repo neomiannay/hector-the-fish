@@ -85,7 +85,7 @@ export default class Renderer
 			blendFunction: BlendFunction.COLOR_DODGE
 		});
 
-		this.noiseEffect.blendMode.opacity.value = 0.2;
+		this.noiseEffect.blendMode.opacity.value = 0.08;
 
         this.vignetteEffect = new VignetteEffect({
 			eskil: false,

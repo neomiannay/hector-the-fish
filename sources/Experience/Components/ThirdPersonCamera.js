@@ -92,7 +92,7 @@ export default class ThirdPersonCamera {
 
         // update fish lookAt
         const relativeNewPoissonLookAt = this._experience.character_placeholder.localToWorld(new Vector3(0, 0, 0).copy(this.idealLookAt));
-        this.updateLookAtPosition(relativeNewPoissonLookAt);
+        // this.updateLookAtPosition(relativeNewPoissonLookAt);
         this._experience.camera.instance.lookAt(
             relativeNewPoissonLookAt
         );
