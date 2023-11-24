@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
-import { BlendFunction, DepthOfFieldEffect, DepthEffect, VignetteEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
+import { BlendFunction, DepthOfFieldEffect, DepthEffect, VignetteEffect, NoiseEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
 export default class Renderer
 {
@@ -81,6 +81,12 @@ export default class Renderer
         this.postProcess.composer.setSize(this.config.width, this.config.height)
         // this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 
+        this.noiseEffect = new NoiseEffect({
+			blendFunction: BlendFunction.COLOR_DODGE
+		});
+
+		this.noiseEffect.blendMode.opacity.value = 0.2;
+
         this.depthOfFieldEffect = new DepthOfFieldEffect(this.camera.instance, {
 			bokehScale: 2.0,
             resolutionScale: 0.25,
@@ -100,6 +106,7 @@ export default class Renderer
             this.camera.instance,
         // this.depthOfFieldEffect,
         // this.depthEffect,
+        this.noiseEffect,
         this.vignetteEffect
         );
 
