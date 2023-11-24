@@ -41,7 +41,6 @@ export default class Experience
 
         this.time = new Time()
         this.sizes = new Sizes()
-        this.isStarted = false;
         this.character = null;
         this.setConfig()
         this.setDebug()
@@ -51,17 +50,9 @@ export default class Experience
         this.setScene()
         this.setCamera()
         this.setRenderer()
-
-        window.addEventListener('click', () => {
-            if (!this.isStarted) {
-                this.isStarted = true;
-
-                this.setAudio()
-                this.setResources()
-                this.setFog()
-                this.setWorld()
-            }
-        });
+        // this.setResources()
+        // this.setFog()
+        // this.setWorld()
 
         this.sizes.on('resize', () =>
         {
@@ -154,9 +145,11 @@ export default class Experience
         this.world = new World()
     }
 
-
     update()
     {
+        if(this.debug)
+            this.debug.refresh(true);
+
         if(this.stats)
             this.stats.update()
 

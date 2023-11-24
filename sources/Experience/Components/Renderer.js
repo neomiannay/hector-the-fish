@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
-import { BlendFunction, DepthOfFieldEffect, DepthEffect, VignetteEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
+import { BlendFunction, DepthOfFieldEffect, DepthEffect, VignetteEffect, NoiseEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
 export default class Renderer
 {
@@ -30,7 +30,7 @@ export default class Renderer
 
     setInstance()
     {
-        this.clearColor = 0x072739;
+        this.clearColor = 0x010e15;
 
         // Renderer
         this.instance = new THREE.WebGLRenderer({
@@ -48,7 +48,7 @@ export default class Renderer
         this.instance.setSize(this.config.width, this.config.height)
         this.instance.setPixelRatio(this.config.pixelRatio)
 
-        // this.instance.physicallyCorrectLights = false
+        this.instance.physicallyCorrectLights = false
         this.instance.outputColorSpace = THREE.SRGBColorSpace
         this.instance.toneMapping = THREE.ACESFilmicToneMapping
         this.instance.toneMappingExposure = 1
@@ -81,6 +81,11 @@ export default class Renderer
         this.postProcess.composer.setSize(this.config.width, this.config.height)
         // this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 
+        this.noiseEffect = new NoiseEffect({
+			blendFunction: BlendFunction.COLOR_DODGE
+		});
+
+		this.noiseEffect.blendMode.opacity.value = 0.2;
 
         this.vignetteEffect = new VignetteEffect({
 			eskil: false,
@@ -90,10 +95,11 @@ export default class Renderer
 
         this.effectPass = new EffectPass(
             this.camera.instance,
+        // this.depthOfFieldEffect,
         // this.depthEffect,
+        this.noiseEffect,
         this.vignetteEffect
         );
-
 
         this.postProcess.composer.addPass(this.postProcess.renderPass)
         this.postProcess.composer.addPass(this.effectPass)
@@ -117,11 +123,10 @@ export default class Renderer
             },
         }
 
+
         this.VignetteFolder = this.debug.addFolder({
             title: 'Vignette',
-            expanded: true,
         })
-
         // Vignette
         this.VignetteFolder
             .addBinding(this.PARAMS.vignette, 'enabled')

@@ -37,7 +37,7 @@ void main()
     vec2 pixel = 10.0 / uResolution.xy;
     uv *= 2.0;
 
-	float f = floor(mod(uTime*.5, 2.0)); 	// Flash value.
+	float f = floor(mod(uTime*.5, 2.0)); 		// Flash value.
 	vec2 first = step(pixel, uv) * f;		   	// Rule out first screen pixels and flash.
 	uv  = step(fract(uv), pixel);				// Add one line of pixels per tile.
 	// colour = mix(colour, vec3(1.0, 1.0, 0.0), (uv.x + uv.y) * first.x * first.y); // Yellow line

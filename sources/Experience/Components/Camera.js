@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import {CameraHelper} from "three";
 
 import vertex from '../Shaders/godray/vertex.glsl'
 import fragment from '../Shaders/godray/fragment.glsl'
+import wsFragment from '../Shaders/whiteScreen/fragment.glsl'
 
 export default class Camera
 {
@@ -12,6 +12,7 @@ export default class Camera
     {
         // Options
         this.experience = new Experience()
+        this.scrollManager = this.experience.scrollManager
         this.config = this.experience.config
         this.debug = this.experience.debug
         this.time = this.experience.time
@@ -25,7 +26,8 @@ export default class Camera
         this.group = new THREE.Group()
 
         this.setInstance()
-        // this.setGodRay()
+        this.setGodRay()
+        this.setWhiteScreen()
 
         if (this.debug) {
             this.setDebug()
@@ -48,6 +50,7 @@ export default class Camera
         this.instance = new THREE.PerspectiveCamera(25, this.config.width / this.config.height, 0.1, 150)
         this.instance.position.set(0, 1.2, 0)
         this.group.add(this.instance)
+        this.instance.godRaysRotation = new THREE.Euler().fromArray([0, 0, 0])
     }
 
     initDebugCamera() {
@@ -68,10 +71,11 @@ export default class Camera
 
     setGodRay()
     {
-        this.plane = new THREE.PlaneGeometry(4, 2)
-        this.planeMaterial = new THREE.ShaderMaterial({
+        this.grPlane = new THREE.PlaneGeometry(4, 2)
+        this.grPlaneMaterial = new THREE.ShaderMaterial({
             transparent: true,
             side: THREE.FrontSide,
+            color: 0xffffff,
             uniforms: {
                 uTime: { value: 0 },
                 uResolution: { value: new THREE.Vector2() },
@@ -79,15 +83,34 @@ export default class Camera
             },
             vertexShader: vertex,
             fragmentShader: fragment,
-            // depthWrite: false,
-            // depthTest: false,
         })
         
-        this.godRay = new THREE.Mesh(this.plane, this.planeMaterial)
+        this.godRay = new THREE.Mesh(this.grPlane, this.grPlaneMaterial)
         this.godRay.frustumCulled = false
         this.godRay.renderOrder = 2
 
         this.group.add(this.godRay)
+    }
+
+    setWhiteScreen()
+    {
+        this.wsPlane = new THREE.PlaneGeometry(4, 2)
+        this.wsPlaneMaterial = new THREE.ShaderMaterial({
+            transparent: true,
+            side: THREE.DoubleSide,
+            uniforms: {
+                uTime: { value: 0 },
+                uResolution: { value: new THREE.Vector2() },
+                uProgress: { value: 0 },
+            },
+            vertexShader: vertex,
+            fragmentShader: wsFragment,
+        })
+        this.whiteScreen = new THREE.Mesh(this.wsPlane, this.wsPlaneMaterial)
+        this.whiteScreen.frustumCulled = false
+        this.whiteScreen.renderOrder = 3
+
+        this.group.add(this.whiteScreen)
     }
 
     setDebug() {
@@ -134,27 +157,21 @@ export default class Camera
         }
 
         // Apply coordinates
-        // this.instance.position.copy(this.modes[this.mode].instance.position)
-        // this.instance.quaternion.copy(this.modes[this.mode].instance.quaternion)
         this.instance.updateMatrixWorld() // To be used in projection
-
-        // Update camera helper
-        if (this.debug && this.cameraHelper) {
-            this.cameraHelper.update()
-        }
 
         // Update godray
         if(this.godRay)
         {
-            this.planeMaterial.uniforms.uTime.value = this.time.delta * 0.001
-            this.planeMaterial.uniforms.uResolution.value.set(this.config.width, this.config.height)
-            this.planeMaterial.uniforms.uCameraRotation.value.copy(this.instance.rotation)
+            this.grPlaneMaterial.uniforms.uTime.value = this.time.delta * 0.001
+            this.grPlaneMaterial.uniforms.uResolution.value.set(this.config.width, this.config.height)
+            this.grPlaneMaterial.uniforms.uCameraRotation.value.copy(this.instance.godRaysRotation)
         }
-
-        // Update camera helper
-        // if (this.debug) {
-        //     this.cameraHelper.update()
-        // }
+        if(this.whiteScreen)
+        {
+            this.wsPlaneMaterial.uniforms.uTime.value = this.time.delta * 0.001
+            this.wsPlaneMaterial.uniforms.uResolution.value.set(this.config.width, this.config.height)
+            this.wsPlaneMaterial.uniforms.uProgress.value = this.scrollManager.progress ? this.scrollManager.progress / 100 : 0;
+        }
     }
 
     destroy()

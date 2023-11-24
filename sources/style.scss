@@ -1,0 +1,113 @@
+:root {
+    --tp-base-background-color: hsla(230, 20%, 11%, 1.00);
+    --tp-base-shadow-color: hsla(0, 0%, 0%, 0.2);
+    --tp-button-background-color: hsla(230, 10%, 80%, 1.00);
+    --tp-button-background-color-active: hsla(230, 10%, 95%, 1.00);
+    --tp-button-background-color-focus: hsla(230, 10%, 90%, 1.00);
+    --tp-button-background-color-hover: hsla(230, 10%, 85%, 1.00);
+    --tp-button-foreground-color: hsla(230, 20%, 11%, 1.00);
+    --tp-container-background-color: hsla(230, 25%, 16%, 1.00);
+    --tp-container-background-color-active: hsla(230, 25%, 31%, 1.00);
+    --tp-container-background-color-focus: hsla(230, 25%, 26%, 1.00);
+    --tp-container-background-color-hover: hsla(230, 25%, 21%, 1.00);
+    --tp-container-foreground-color: hsla(230, 10%, 80%, 1.00);
+    --tp-groove-foreground-color: hsla(230, 20%, 8%, 1.00);
+    --tp-input-background-color: hsla(230, 20%, 8%, 1.00);
+    --tp-input-background-color-active: hsla(230, 28%, 23%, 1.00);
+    --tp-input-background-color-focus: hsla(230, 28%, 18%, 1.00);
+    --tp-input-background-color-hover: hsla(230, 20%, 13%, 1.00);
+    --tp-input-foreground-color: hsla(230, 10%, 80%, 1.00);
+    --tp-label-foreground-color: hsla(230, 12%, 48%, 1.00);
+    --tp-monitor-background-color: hsla(230, 20%, 8%, 1.00);
+    --tp-monitor-foreground-color: hsla(230, 12%, 48%, 1.00);
+}
+
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body
+{
+    overflow: hidden;
+}
+
+.experience
+{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
+.mask {
+    z-index: 10;
+    position: absolute;
+    left: 50%;
+    bottom: 6rem;
+    transform: translateX(-50%);
+    letter-spacing: .2em;
+    border: 1px solid white;
+    border-radius: 20px;
+    cursor: pointer;
+
+    width: min-content;
+    display: flex;
+    align-items: center;
+    height: 2.4rem;
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase;
+    font-family: 'nimbus-sans', sans-serif;
+
+    span {
+        height: 2rem;
+        line-height: 2rem;
+        overflow: hidden;
+
+        div{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 300ms ease-in-out;
+            padding: 0 1.5rem;
+
+            &:hover {
+                transform: translateY(-2rem);
+
+                span {
+                    &:first-child {
+                        transform: translateY(-.9rem);
+                    }
+                }
+            }
+
+            span {
+                &:first-child {
+                    transition: transform 300ms ease-in-out;
+                }
+                &:last-child {
+                    transition: transform 300ms ease-in-out;
+                }
+            }
+        }
+    }
+}
+
+.video__player {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    object-fit: cover;
+    display: none;
+}
+
+.video__player--active {
+    display: initial;
+}

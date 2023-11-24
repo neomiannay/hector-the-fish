@@ -10,31 +10,46 @@ import Character from "../Components/Character";
 import {AxesHelper} from "three";
 import Sounds from "../Components/Sounds";
 
+import { gsap } from 'gsap';
+import lerp from '../Utils/lerp.js'
+
 export default class Intro {
     constructor(_options)
     {
         this.experience = new Experience()
+        this.scrollManager = this.experience.scrollManager
         this.config = this.experience.config
         this.debug = this.experience.config.debug;
         this.scene = this.experience.scene
+        this.time = this.experience.time
         this.resources = this.experience.resources
         this.camera = this.experience.camera
+        this.fog = this.experience.fog
 
         this.terrain = {
-            size: 10,
+            size: 60,
             x: 0,
             y: -0.5,
             z: -1,
         }
 
+        this.startBtn = document.querySelector('.mask');
 
-        this.setScene()
+        this.setScene();
+        this.setupAnimation();
     }
 
     setScene()
     {
+        // Set the scene elements
         this.boat = new Boat();
         this.character = new Character();
+        this.algue = this.resources.items.algue.scene
+
+        this.algue.position.set(5, 0, -15);
+        this.algue.scale.set(3, 3, 3);
+
+        this.scene.add(this.algue);
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);
@@ -54,6 +69,36 @@ export default class Intro {
         this.soundsManager = new Sounds();
     }
 
+    setupAnimation() {
+        this.startBtn.addEventListener('click', () => {
+            const targetFar = 50;
+            const duration = 2;
+
+            gsap.to(this.fog, {
+                far: targetFar,
+                duration: duration,
+                ease: 'power2.intOut',
+                onUpdate: () => {
+                    // this.scene.fog.far = this.fog.far;
+                    this.scrollManager.toggleScrollability(true);
+                },
+                onComplete: () => {
+                }
+            });
+
+            gsap.to(this.startBtn, {
+                opacity: 0,
+                y: -50,
+                duration: .5,
+                ease: 'power2.intOut',
+                onComplete: () => {
+                    this.startBtn.style.display = 'none';
+                }
+            });
+        });
+    }
+
+
     setCaustics()
     {
         this.causticGeo = new THREE.PlaneGeometry(this.terrain.size, this.terrain.size, 100, 100);
@@ -72,6 +117,11 @@ export default class Intro {
 
     setSand()
     {
+        this.texture = this.resources.items.sandDiffuse;
+        this.texture.wrapS = THREE.RepeatWrapping;
+        this.texture.wrapT = THREE.RepeatWrapping;
+        this.texture.repeat.set(6, 6);
+
         this.sand = new THREE.PlaneGeometry(this.terrain.size, this.terrain.size, 100, 100);
         this.sandMat = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,

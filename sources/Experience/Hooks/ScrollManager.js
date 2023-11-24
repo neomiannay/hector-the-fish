@@ -1,22 +1,30 @@
 import Experience from "../Experience";
 import lerp from "../Utils/lerp";
 
+import { gsap } from 'gsap';
+
 export default class ScrollManager {
   constructor() {
     this.experience = new Experience();
     this.debug = this.experience.debug;
 
     this.options = {
-      begin: 0,
-      end: 100,
-      progress: 0,
-      scrollingDirection: null,
-      isScrolling: false,
+        begin: 0,
+        end: 100,
+        progress: 2, // 0
+        scrollingDirection: null,
+        isScrolling: false,
+        isScrollable: false,
     };
     this.incrementAmount = .03;
     this.animationId = null;
+    this.animationId2 = null;
     this.scrollTimeout = null;
     this.scrollStopCallback = null;
+
+    this.startBtn = document.querySelector('.mask');
+    this.video = document.querySelector('.video__player');
+
     this.init();
 
     if (this.debug) {
@@ -43,7 +51,23 @@ export default class ScrollManager {
     }
 
     init() {
-        window.addEventListener('wheel', this.handleWheelEvent.bind(this));
+        window.addEventListener('wheel', (event) => {
+            if(this.isScrollable) {
+                this.handleWheelEvent.bind(this)(event);
+            }
+        });
+
+        this.startBtn.addEventListener('click', () => {
+            this.videoController();
+        })
+    }
+
+    toggleScrollability(isScrollable) {
+        if (isScrollable && !this.isScrollable) {
+            this.isScrollable = true;
+        } else {
+            this.isScrollable = isScrollable;
+        }
     }
 
     handleWheelEvent(event) {
@@ -97,6 +121,34 @@ export default class ScrollManager {
         update();
     }
 
+    videoController() {
+        const step = () => {
+            if (this.options.progress >= 20) {
+                this.video.classList.add('video__player--active');
+                this.video.play();
+
+                this.toggleScrollability(false);
+
+                this.video.addEventListener('ended', () => {
+                    this.options.progress = 2;
+                    this.toggleScrollability(true);
+                    this.resetExperience()
+                })
+            }
+
+            this.animationId2 = requestAnimationFrame(step);
+        }
+        step();
+
+    }
+
+    resetExperience() {
+        this.options.progress = 2;
+        this.video.classList.remove('video__player--active');
+        cancelAnimationFrame(this.animationId2);
+        this.videoController();
+    }
+
     animate(isIncreasing, speedFactor) {
         const targetProgress = isIncreasing ? this.options.end : this.options.begin;
         const step = () => {
@@ -132,7 +184,9 @@ export default class ScrollManager {
 
     destroy() {
         window.removeEventListener('wheel', this.handleWheelEvent.bind(this));
+
         clearTimeout(this.scrollTimeout);
         cancelAnimationFrame(this.animationId);
+        cancelAnimationFrame(this.animationId2);
     }
 }
