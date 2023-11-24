@@ -17,9 +17,10 @@ export default [
             {name: 'mainMusic', source: '/assets/sounds/main-music.mp3', type: 'audio'},
             {name: 'deepTheme', source: '/assets/sounds/deep-ocean.mp3', type: 'audio'},
             {name: 'fearSound', source: '/assets/sounds/fear-sound.wav', type: 'audio'},
-            // {name: 'boatSound', source: '/assets/sounds/fear-sound.wav', type: 'audio'},
-            // {name: 'ambientSound', source: '/assets/sounds/ambient.mp3', type: 'audio'},
-
+            {name: 'plantSound', source: '/assets/sounds/moving-plants.wav', type: 'audio'},
+            {name: 'boatGrincement', source: '/assets/sounds/bateau.wav', type: 'audio'},
+            {name: 'discoverCoquillage', source: '/assets/sounds/discover-coquillage.mp3', type: 'audio'},
+            {name: 'bruitEffrayant', source: '/assets/sounds/bruit-effrayant.mp3', type: 'audio'},
         ]
     }
 ]

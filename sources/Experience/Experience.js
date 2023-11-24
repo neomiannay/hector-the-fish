@@ -5,7 +5,7 @@ import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 import Time from './Utils/Time.js'
 import Sizes from './Utils/Sizes.js'
 import Stats from './Utils/Stats.js'
-import ScrollManager from './Hooks/ScrollManager.js';
+import ScrollManager from './Hooks/ScrollManager.js'
 
 import Resources from './Components/Resources.js'
 import Renderer from './Components/Renderer.js'
@@ -16,6 +16,9 @@ import World from './Components/World.js'
 import assets from './assets.js'
 import MousePos from "./Utils/MousePos";
 import ThirdPersonCamera from "./Components/ThirdPersonCamera";
+
+import Sounds from './Components/Sounds.js';
+import {gsap} from "gsap";
 import UI from "./UI";
 
 export default class Experience
@@ -216,7 +219,6 @@ export default class Experience
 
         if(this.world)
             this.world.resize()
-
     }
 
     destroy()

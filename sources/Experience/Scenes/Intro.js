@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+
 import Experience from '../Experience.js'
 
 import Caustics from '../Objects/Caustics.js'
@@ -20,6 +22,7 @@ export default class Intro {
         this.scrollManager = this.experience.scrollManager
         this.config = this.experience.config
         this.debug = this.experience.config.debug;
+        this.debugFolder = this.experience.debug
         this.scene = this.experience.scene
         this.time = this.experience.time
         this.resources = this.experience.resources
@@ -44,11 +47,6 @@ export default class Intro {
         this.character = new Character();
         this.algue = this.resources.items.algue.scene
 
-        this.algue.position.set(5, 0, -15);
-        this.algue.scale.set(3, 3, 3);
-
-        this.scene.add(this.algue);
-
         const light = new THREE.AmbientLight(0xffffff, 1);
         this.scene.add(light);
 
@@ -57,10 +55,75 @@ export default class Intro {
             // this.scene.add(axesHelper);
         }
 
-        this.setSounds();
-
+        
         this.setSand();
         this.setCaustics();
+        this.setAlgue();
+        
+        this.setSounds();
+    }
+
+    setAlgue() {
+        this.algue = this.resources.items.algue.scene;
+
+        this.positions = [
+            { x: -7.5, z: -2.5 },
+            { x: -2, z: -10 },
+            { x: 2.5, z: -5 },
+            { x: 6.5, z: -8.25 },
+            { x: -2, z: 2 },
+            { x: 2.25, z: 3.5 },
+            { x: 0, z: 10 },
+            { x: 4.5, z: 7.75 },
+            { x: -4.5, z: 8.25 },
+            { x: -4, z: 7 },
+            { x: 8, z: 1 },
+            { x: -6, z: -4.5 },
+            { x: -3.5, z: -6.5 },
+            { x: -8.5, z: -9.5 },
+        ];
+
+        this.algueFloor = new THREE.Group();
+        this.algueFloor.name = 'algueFloor';
+        this.positions.forEach((position) => {
+            const algue = this.algue.clone();
+            algue.position.set(position.x, -.5, position.z);
+            algue.rotation.set(0, Math.random() * Math.PI, 0);
+            algue.scale.set(
+                lerp(1.2, 2.5, Math.random()),
+                lerp(1.2, 2.5, Math.random()),
+                lerp(1.2, 2.5, Math.random()),
+            );
+            this.algueFloor.add(algue);
+        })
+        this.scene.add(this.algueFloor);
+
+
+        this.descentPosition = [
+            { x: 1.5, y: 40, z: -8 },
+            { x: -2, y: 33, z: -8 },
+            { x: 1.5, y: 30, z: -7.5 },
+            { x: 1.25, y: 24, z: -7 },
+            { x: -1.25, y: 12, z: -6.5 },
+            { x: -1.75, y: 12, z: -5.75 },
+            { x: 1.5, y: 8, z: -4 },
+            { x: 1.25, y: 6, z: -4 },
+        ]
+
+        this.algueDescent = new THREE.Group();
+        this.algueDescent.name = 'algueDescent';
+        this.descentPosition.forEach((position) => {
+            const algue = this.algue.clone();
+            algue.position.set(position.x, position.y, position.z);
+            algue.rotation.set(Math.PI / 4, Math.random() * Math.PI, 0);
+            algue.scale.set(
+                lerp(1.2, 2.5, Math.random()),
+                lerp(1.2, 2.5, Math.random()),
+                lerp(1.2, 2.5, Math.random()),
+            );
+            this.algueDescent.add(algue);
+        })
+        this.scene.add(this.algueDescent);
     }
 
     setSounds() {
