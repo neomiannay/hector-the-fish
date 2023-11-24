@@ -53,8 +53,8 @@ export default class Intro {
         this.scene.add(light);
 
         if (this.debug) {
-            const axesHelper = new AxesHelper(15);
-            this.scene.add(axesHelper);
+            // const axesHelper = new AxesHelper(15);
+            // this.scene.add(axesHelper);
         }
 
         this.setSounds();

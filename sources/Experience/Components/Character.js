@@ -22,7 +22,7 @@ export default class Character {
 
         this.instance = this.resources.items.fish;
 
-        this.instance.scene.add(new AxesHelper(15))
+        // this.instance.scene.add(new AxesHelper(15))
         this.instance.scene.name = 'character';
 
         this.instance.scene.scale.set(0.050, 0.05, 0.05);
