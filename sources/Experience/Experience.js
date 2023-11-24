@@ -17,6 +17,7 @@ import assets from './assets.js'
 import MousePos from "./Utils/MousePos";
 import ThirdPersonCamera from "./Components/ThirdPersonCamera";
 import Sounds from "./Components/Sounds";
+import {gsap} from "gsap";
 
 export default class Experience
 {
@@ -41,6 +42,7 @@ export default class Experience
 
         this.time = new Time()
         this.sizes = new Sizes()
+        this.startBtn = document.querySelector('.mask');
         this.character = null;
         this.setConfig()
         this.setDebug()
@@ -50,6 +52,8 @@ export default class Experience
         this.setScene()
         this.setCamera()
         this.setRenderer()
+        this.setupAnimation();
+
         // this.setResources()
         // this.setFog()
         // this.setWorld()
@@ -116,6 +120,26 @@ export default class Experience
     {
         this.camera = new Camera()
         this.thirdPersonCamera = new ThirdPersonCamera();
+    }
+
+    setupAnimation() {
+        this.startBtn.addEventListener('click', () => {
+
+            gsap.to(this.startBtn, {
+                opacity: 0,
+                y: -50,
+                duration: .5,
+                ease: 'power2.intOut',
+                onComplete: () => {
+                    this.startBtn.style.display = 'none';
+                }
+            });
+
+            this.setAudio()
+            this.setResources()
+            this.setWorld()
+            this.setFog()
+        });
     }
 
     setAudio()

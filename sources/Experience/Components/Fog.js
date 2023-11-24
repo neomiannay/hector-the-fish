@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
+import {gsap} from "gsap";
 
 export default class Fog {
     constructor(_options) {
@@ -23,6 +24,7 @@ export default class Fog {
             {
                 this.setFog()
                 this.setModes()
+                this.setAnimation()
 
                 if (this.debug) {
                     this.debugFolder()
@@ -43,6 +45,23 @@ export default class Fog {
         this.modes.debug = {}
         this.modes.debug.instance = this.instance.clone()
 
+    }
+
+    setAnimation() {
+        const targetFar = 50;
+        const duration = 2;
+
+        gsap.to(this.instance, {
+            far: targetFar,
+            duration: duration,
+            ease: 'power2.intOut',
+            onUpdate: () => {
+                // this.scene.fog.far = this.fog.far;
+                this.experience.scrollManager.toggleScrollability(true);
+            },
+            onComplete: () => {
+            }
+        });
     }
 
 

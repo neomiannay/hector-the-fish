@@ -17,7 +17,7 @@ export default [
             {name: 'mainMusic', source: '/assets/sounds/main-music.mp3', type: 'audio'},
             {name: 'deepTheme', source: '/assets/sounds/deep-ocean.mp3', type: 'audio'},
             {name: 'fearSound', source: '/assets/sounds/fear-sound.wav', type: 'audio'},
-            {name: 'boatSound', source: '/assets/sounds/fear-sound.wav', type: 'audio'},
+            // {name: 'boatSound', source: '/assets/sounds/fear-sound.wav', type: 'audio'},
             // {name: 'ambientSound', source: '/assets/sounds/ambient.mp3', type: 'audio'},
 
         ]

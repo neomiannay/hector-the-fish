@@ -81,8 +81,8 @@ export default class ThirdPersonCamera {
     }
 
     updateLookAtPosition(p) {
-        p.x += this.mouse.x * 0.1;
-        p.y -= this.mouse.y * 0.1;
+        p.x += this.mouse.x * 0.005;
+        p.y -= this.mouse.y * 0.005;
     }
 
     update() {

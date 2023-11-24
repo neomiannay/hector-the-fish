@@ -39,6 +39,7 @@ export default class Resources extends EventEmitter
                 data.needsUpdate = true
             } else if (_resource.type === 'audio') {
                 if(!(data instanceof THREE.Audio)) {
+                    console.log('loading: ', _resource)
                     const sound = new THREE.PositionalAudio(this.audioListener);
                     sound.setBuffer(_data);
                     sound.setRefDistance(100)

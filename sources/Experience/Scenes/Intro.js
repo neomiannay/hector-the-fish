@@ -33,10 +33,8 @@ export default class Intro {
             z: -1,
         }
 
-        this.startBtn = document.querySelector('.mask');
 
         this.setScene();
-        this.setupAnimation();
     }
 
     setScene()
@@ -68,36 +66,6 @@ export default class Intro {
     setSounds() {
         this.soundsManager = new Sounds();
     }
-
-    setupAnimation() {
-        this.startBtn.addEventListener('click', () => {
-            const targetFar = 50;
-            const duration = 2;
-
-            gsap.to(this.fog, {
-                far: targetFar,
-                duration: duration,
-                ease: 'power2.intOut',
-                onUpdate: () => {
-                    // this.scene.fog.far = this.fog.far;
-                    this.scrollManager.toggleScrollability(true);
-                },
-                onComplete: () => {
-                }
-            });
-
-            gsap.to(this.startBtn, {
-                opacity: 0,
-                y: -50,
-                duration: .5,
-                ease: 'power2.intOut',
-                onComplete: () => {
-                    this.startBtn.style.display = 'none';
-                }
-            });
-        });
-    }
-
 
     setCaustics()
     {
