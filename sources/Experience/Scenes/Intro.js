@@ -87,8 +87,7 @@ export default class Intro {
                 duration: .5,
                 ease: 'power2.intOut',
                 onComplete: () => {
-                    this.startBtn.classList.remove('set-pointer');
-                    this.startBtn.classList.add('unset-pointer');
+                    this.startBtn.style.display = 'none';
                 }
             });
             

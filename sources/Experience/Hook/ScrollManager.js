@@ -101,20 +101,16 @@ export default class ScrollManager {
     }
 
     videoController() {
-        let isVideoPlayed = false;
-
         const step = () => {
-            if (this.options.progress >= 85 && !isVideoPlayed) {
-
+            if (this.options.progress >= 20) {
                 this.video.classList.add('video__player--active');
                 this.video.play();
-                isVideoPlayed = true;
 
                 this.toggleScrollability(false);
     
                 this.video.addEventListener('ended', () => {
                     this.options.progress = 13;
-                    isVideoPlayed = false;
+                    this.toggleScrollability(true);
                     this.resetExperience()
                 })
             }
@@ -128,19 +124,7 @@ export default class ScrollManager {
     resetExperience() {
         this.options.progress = 13;
         this.video.classList.remove('video__player--active');
-        cancelAnimationFrame(this.animationId);
         cancelAnimationFrame(this.animationId2);
-
-        gsap.to(this.startBtn, {
-            opacity: 1,
-            y: 0,
-            duration: .5,
-            ease: 'power2.intOut',
-            onUpdate: () => {
-                this.startBtn.classList.remove('unset-pointer');
-                this.startBtn.classList.add('set-pointer');
-            }
-        });
     }
 
     animate(isIncreasing, speedFactor) {
