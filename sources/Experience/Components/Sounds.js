@@ -107,10 +107,15 @@ export default class Sounds {
             this._experience.resources.items.fishTalking.setVolume(0.3)
             this.ambientSound.setVolume(0.10);
             this.deepAmbientSound.setVolume(.5);
-            this._experience.resources.items.discoverCoquillage.setVolume(0.6)
+            this._experience.resources.items.discoverCoquillage.setVolume(0.9)
             this._experience.resources.items.discoverCoquillage.setLoop(true);
             this._experience.resources.items.discoverCoquillage.position.set(0, 0, 5);
             this._experience.resources.items.discoverCoquillage.play();
+        })
+
+        /* Fish talking: 100% progress */
+        this._experience.scrollManager.on(95, () => {
+            this._experience.audioListener.setMasterVolume(0.2)
         })
     }
 

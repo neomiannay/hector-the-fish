@@ -195,6 +195,10 @@ export default class Resources extends EventEmitter
                 this.loadingScreenElement.remove();
                 this.loadingScreenElement = null;
                 this.loadingBarElement = null;
+
+                setTimeout(() => {
+                    this.experience.ui.mainScreen.style.display = 'none';
+                }, 500)
             }
             this.trigger('end'); // Signal that all resources are loaded
         }

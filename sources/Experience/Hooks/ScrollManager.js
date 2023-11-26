@@ -170,8 +170,7 @@ export default class ScrollManager {
 
     updateAmount() {
         const range = this.options.end - this.options.begin;
-        const mappedValue = (this.options.progress / 100) * range + this.options.begin;
-        console.log('mappedValue', mappedValue)
+        const mappedValue = (this.options.progress.toFixed(1) / 100) * range + this.options.begin;
         this.options.amount = mappedValue;
     }
 
