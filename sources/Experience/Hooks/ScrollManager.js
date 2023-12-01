@@ -16,7 +16,7 @@ export default class ScrollManager {
         isScrolling: false,
         isScrollable: false,
     };
-    this.incrementAmount = .03;
+    this.incrementAmount = .05;
     this.animationId = null;
     this.animationId2 = null;
     this.scrollTimeout = null;
